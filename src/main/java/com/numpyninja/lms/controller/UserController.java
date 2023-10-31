@@ -70,6 +70,7 @@ public class UserController {
 
 	//create user with Role
 	@PostMapping("/users/roleStatus")
+	@RolesAllowed({"ROLES_ADMIN"})
 	@ApiOperation("Create User Login with Role")
 	public ResponseEntity<UserDto> createUserloginWithRole(@Valid @RequestBody UserLoginRoleDTO newUserRoleDto) throws InvalidDataException, DuplicateResourceFoundException {
 		UserDto responseDto = userServices.createUserLoginWithRole(newUserRoleDto);
@@ -78,6 +79,7 @@ public class UserController {
 
 	//update user info in User Table
 	@PutMapping("/users/{userId}")
+	@RolesAllowed({"ROLES_ADMIN"})
 	@ApiOperation("Update User")
 	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto updateuserDto, @PathVariable(value = "userId") String userId) throws ResourceNotFoundException, InvalidDataException {
 		UserDto responseDto = userServices.updateUser(updateuserDto, userId);
@@ -87,6 +89,7 @@ public class UserController {
 	//Ask front end to include a separate link to update role status for user
 	//update User role - (Active/inactive) for a given user id and role id
 	@PutMapping("/users/roleStatus/{userId}")
+	@RolesAllowed({"ROLE_ADMIN"})
 	@ApiOperation("Update User Role Status")
 	public ResponseEntity<String> updateUserRoleStatus(@Valid @PathVariable(value = "userId") String userId, @Valid @RequestBody UserRoleMapSlimDTO updateUserRoleStatus) throws InvalidDataException {
 		//String UserRole, String UserStatus
@@ -96,6 +99,7 @@ public class UserController {
 
 	//cascade deletes users and User roles
 	@DeleteMapping("/users/{userId}")
+	@RolesAllowed({"ROLES_ADMIN"})
 	@ApiOperation("Delete User")
 	public ResponseEntity<String> deleteUser(@PathVariable(value = "userId") String userId) throws ResourceNotFoundException {
 		String deletedUserId = userServices.deleteUser(userId);
@@ -115,6 +119,7 @@ public class UserController {
 	// Ask front end to include a separate link to assign program/batch to existing user
 	// Update existing user to assign program and its corresponding batch
 	@PutMapping("/users/roleProgramBatchStatus/{userId}")
+	@RolesAllowed({"ROLE_ADMIN"})
 	@ApiOperation("Update User Role Program Batch status")
 	public ResponseEntity<String> assignUpdateUserRoleProgramBatchStatus(@PathVariable String userId,
 																		 @RequestBody UserRoleProgramBatchDto userRoleProgramBatchDto) {
