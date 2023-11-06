@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,7 +70,7 @@ public class ProgBatchController  {
 	
 	
     @PostMapping(path = "/batches", consumes = "application/json", produces = "application/json")
-    @RolesAllowed({"ROLE_ADMIN"})
+    @PreAuthorize("{ROLE_ADMIN}")
     @ApiOperation("Create New Batch")
     public ResponseEntity<BatchDTO> createBatch( @Valid @RequestBody BatchDTO batchDTO ) {
         BatchDTO batchDTOCreatd = batchService.createBatch(batchDTO );
@@ -79,7 +80,7 @@ public class ProgBatchController  {
     
     //Update program Information
     @PutMapping(path = "/batches/{batchId}", consumes = "application/json", produces = "application/json")
-    @RolesAllowed({"ROLE_ADMIN"})
+    @PreAuthorize("{ROLE_ADMIN}")
     @ApiOperation("Update Batch details")
     public ResponseEntity<BatchDTO> updateBatch( @Valid @RequestBody BatchDTO batchDTO,  @PathVariable Integer batchId ) {
     	BatchDTO batchDTOUpd = batchService.updateBatch( batchDTO, batchId);
@@ -88,7 +89,7 @@ public class ProgBatchController  {
 
     
     @DeleteMapping(path = "/batches/{id}" , produces = "application/json" )
-    @RolesAllowed({"ROLE_ADMIN"})
+    @PreAuthorize("{ROLE_ADMIN}}")
     @ApiOperation("Delete existing Batch")
     public String deleteBatch( @PathVariable Integer id) {
         batchService.deleteProgramBatch(id);
