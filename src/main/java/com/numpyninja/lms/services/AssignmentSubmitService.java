@@ -351,6 +351,62 @@ public class AssignmentSubmitService {
         	throw new ResourceNotFoundException("Submissions for Program Id: "+programId+ " Not found");
         }
     }
-     	
+    
+    public double getGradesMeanByBatchId(Integer batchId) {
+		
+		AssignmentSubmit assignment;
+		 List<Integer> gradeList = new ArrayList<>();
+		double sum = 0;
+		double mean;
+		
+		
+		List<AssignmentSubmit> assignmentSubmits = assignmentSubmitRepository.findByAssignment_Batch_BatchId(batchId);
+        if (assignmentSubmits.isEmpty()) {
+            throw new ResourceNotFoundException("Assignments with grades does not exist for Batch ID : "+batchId);
+        }	
+		
+		for (int i = 0; i < assignmentSubmits.size(); i++) {
+			assignment = (AssignmentSubmit)assignmentSubmits.get(i);
+			gradeList.add(assignment.getGrade());
+		}
+		
+		for(int grade : gradeList) {
+			sum += grade;
+		}
+		System.out.println("sum= "+sum);
+		double length = gradeList.size();
+		 mean = sum/length;	
+		 System.out.println("mean= "+mean);
+		return mean;
+	}
+
+	public double getGradesMedianByBatchId(Integer batchId) {
+		AssignmentSubmit assignment;
+		 List<Integer> gradeList = new ArrayList<>();
+		
+		List<AssignmentSubmit> assignmentSubmits = assignmentSubmitRepository.findByAssignment_Batch_BatchId(batchId);
+       if (assignmentSubmits.isEmpty()) {
+           throw new ResourceNotFoundException("Assignments with grades does not exist for Batch ID : "+batchId);
+       }	
+		
+		for (int i = 0; i < assignmentSubmits.size(); i++) {
+			assignment = (AssignmentSubmit)assignmentSubmits.get(i);
+			gradeList.add(assignment.getGrade());
+		}
+		System.out.println("unsorted list= "+gradeList);
+		Collections.sort(gradeList);
+		int length = gradeList.size();
+		System.out.println("sorted list= "+gradeList);
+		System.out.println("length= "+length);
+		 int middle = length/2;
+	    if (length%2 == 1) { 
+	    	System.out.println("median= "+(gradeList.get(middle)));
+	        return gradeList.get(middle);
+	    } else {	   
+	    	System.out.println("median= "+(gradeList.get(middle)));
+	        return (gradeList.get(middle-1) + gradeList.get(middle)) / 2.0;
+	    }
+	}
+     	    	
 
 }
