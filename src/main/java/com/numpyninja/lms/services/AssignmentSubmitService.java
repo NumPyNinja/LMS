@@ -373,16 +373,14 @@ public class AssignmentSubmitService {
 		for(int grade : gradeList) {
 			sum += grade;
 		}
-		System.out.println("sum= "+sum);
 		double length = gradeList.size();
-		 mean = sum/length;	
-		 System.out.println("mean= "+mean);
+		mean = sum/length;	
 		return mean;
 	}
 
 	public double getGradesMedianByBatchId(Integer batchId) {
 		AssignmentSubmit assignment;
-		 List<Integer> gradeList = new ArrayList<>();
+		List<Integer> gradeList = new ArrayList<>();
 		
 		List<AssignmentSubmit> assignmentSubmits = assignmentSubmitRepository.findByAssignment_Batch_BatchId(batchId);
        if (assignmentSubmits.isEmpty()) {
@@ -393,17 +391,14 @@ public class AssignmentSubmitService {
 			assignment = (AssignmentSubmit)assignmentSubmits.get(i);
 			gradeList.add(assignment.getGrade());
 		}
-		System.out.println("unsorted list= "+gradeList);
+	
 		Collections.sort(gradeList);
 		int length = gradeList.size();
-		System.out.println("sorted list= "+gradeList);
-		System.out.println("length= "+length);
-		 int middle = length/2;
+		int middle = length/2;
+		
 	    if (length%2 == 1) { 
-	    	System.out.println("median= "+(gradeList.get(middle)));
 	        return gradeList.get(middle);
-	    } else {	   
-	    	System.out.println("median= "+(gradeList.get(middle)));
+	    } else {
 	        return (gradeList.get(middle-1) + gradeList.get(middle)) / 2.0;
 	    }
 	}
