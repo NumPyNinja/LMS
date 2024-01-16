@@ -39,7 +39,7 @@ import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class UserPictureServiceTest {
+public class UserPictureServiceTest{
 
     @Mock
     private UserPictureRepository userPictureRepository;

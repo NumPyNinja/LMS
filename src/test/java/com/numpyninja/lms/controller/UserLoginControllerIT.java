@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @ComponentScan(basePackages = "com.numpyninja.lms.*")
 @ContextConfiguration(classes = {WebSecurityConfig.class})
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
-public class UserLoginControllerIT {
+public class UserLoginControllerIT{
 
     private MockMvc mockMvc;
 

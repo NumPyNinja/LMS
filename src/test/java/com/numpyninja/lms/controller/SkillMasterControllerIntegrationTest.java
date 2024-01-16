@@ -51,7 +51,7 @@ public class SkillMasterControllerIntegrationTest {
 
 
     @BeforeEach
-    public void beforeSetup() throws Exception {
+    public void beforeSetup() throws Exception{
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
 
         // fetch a token

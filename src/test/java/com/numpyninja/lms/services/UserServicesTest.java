@@ -31,7 +31,7 @@ import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class UserServicesTest {
+class UserServicesTest{
 
     @Mock
     private UserRepository userRepo;

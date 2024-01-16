@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServices implements UserDetailsService {
+public class UserServices implements UserDetailsService{
 
     @Autowired
     UserRepository userRepository;

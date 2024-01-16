@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @WebMvcTest(UserSkillController.class)
 @ComponentScan(basePackages = "com.numpyninja.lms.*")
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
-public class UserSkillControllerIntegrationTest {
+public class UserSkillControllerIntegrationTest{
 
     private static  MockMvc mockMvc;
 

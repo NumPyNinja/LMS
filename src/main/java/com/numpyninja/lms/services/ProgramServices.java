@@ -44,7 +44,7 @@ public class ProgramServices {
 	@Autowired
 	private UserMapper userMapper;
 	
-	public List<ProgramWithUsersDTO> getAllProgramsWithUsers(){
+	public List<ProgramWithUsersDTO> getAllProgramsWithUsers() {
 		List<ProgramWithUsersDTO> programsWithUserDto = new ArrayList<>();
 		List<UserRoleProgramBatchMap> userRoleProgramBatchMapList = userRoleProgramBatchMapRepo.findAll();
 		Map<Program, List<UserRoleProgramBatchMap>> programMap = userRoleProgramBatchMapList.stream().collect(Collectors.groupingBy(UserRoleProgramBatchMap::getProgram));

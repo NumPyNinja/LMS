@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(UserPictureController.class)
 @WithMockUser
-public class UserPictureControllerTest extends AbstractTestController {
+public class UserPictureControllerTest extends AbstractTestController{
 
     @Autowired
     MockMvc mockMvc;

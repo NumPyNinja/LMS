@@ -45,7 +45,7 @@ import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(UserLoginController.class)
-public class UserLoginControllerTest extends AbstractTestController {
+public class UserLoginControllerTest extends AbstractTestController{
     @Autowired
     private MockMvc mockMvc;
 

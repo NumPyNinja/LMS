@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Bean;
 public class TestWebSecurityConfig {
 
     @Bean
-    public WebSecurityConfig webSecurityConfig() {
+    public WebSecurityConfig webSecurityConfig(){
         return new WebSecurityConfig();
     }
 

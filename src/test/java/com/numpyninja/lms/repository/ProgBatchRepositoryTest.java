@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
 @Transactional
-public class ProgBatchRepositoryTest {
+public class ProgBatchRepositoryTest{
 
 	@Autowired
 	private ProgBatchRepository progBatchRepository;

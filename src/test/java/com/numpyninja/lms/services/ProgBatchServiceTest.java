@@ -35,7 +35,7 @@ import com.numpyninja.lms.repository.ProgBatchRepository;
 
 
 @ExtendWith(MockitoExtension.class)        //Extension that initializes mocks and handles strict stubbings. This extension is the JUnit Jupiter equivalent of our JUnit4 MockitoJUnitRunner. 
-public class ProgBatchServiceTest {
+public class ProgBatchServiceTest{
 	@Mock
 	private ProgBatchRepository batchRepository;
 	

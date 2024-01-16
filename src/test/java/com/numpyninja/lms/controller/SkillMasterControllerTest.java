@@ -39,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(value = SkillMasterController.class)
 @WithMockUser
-public class SkillMasterControllerTest extends AbstractTestController {
+public class SkillMasterControllerTest extends AbstractTestController{
 
     @Autowired
     private MockMvc mockMvc;

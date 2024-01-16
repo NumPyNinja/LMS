@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @WebMvcTest(AssignmentSubmitController.class)
 @ComponentScan(basePackages = "com.numpyninja.lms.*")
 @TestMethodOrder(value = MethodOrderer.OrderAnnotation.class)
-public class AssignmentSubmitControllerIT {
+public class AssignmentSubmitControllerIT{
 
     private MockMvc mockMvc;
 
