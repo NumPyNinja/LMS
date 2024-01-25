@@ -124,10 +124,10 @@ public class AttendanceServices {
 		return attendanceMapper.toAttendanceDto(newAttendance);
 	}
 
-private boolean validAttendanceDate(LocalDate classDate){
+	private boolean validAttendanceDate(LocalDate classDate){
 		LocalDate dateBefore7days = LocalDate.now().minusDays(7);
         return classDate.isBefore(java.time.LocalDate.now()) &&
-				classDate.isAfter(dateBefore7days);
+				classDate.isAfter(dateBefore7days)|| classDate.isEqual(classDate);
     }
 
 	// Update new Attendance under class
