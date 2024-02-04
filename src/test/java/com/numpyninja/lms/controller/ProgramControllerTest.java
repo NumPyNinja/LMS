@@ -169,6 +169,7 @@ public class ProgramControllerTest extends AbstractTestController {
 
     @DisplayName("Test for Creating a Program")
     @Test
+    @WithMockAdmin
     @SneakyThrows
     @WithMockAdmin
     public void testCreateProgram() {
