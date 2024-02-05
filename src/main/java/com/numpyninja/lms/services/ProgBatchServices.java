@@ -100,11 +100,11 @@ public class ProgBatchServices {
     //Update new Batch                    
     public BatchDTO updateBatch(BatchDTO batchDTO, Integer batchId) {
 
-        if(progBatchRepository.existsByBatchNameAndProgramProgramId(batchDTO.getBatchName(),batchDTO.getProgramId())){
-            String message = String.format("Batch with the name=%s and programId=%d already exists",
-                    batchDTO.getBatchName(), batchDTO.getProgramId());
-            throw new DuplicateResourceFoundException(message);
-        }
+//        if(progBatchRepository.existsByBatchNameAndProgramProgramId(batchDTO.getBatchName(),batchDTO.getProgramId())){
+//            String message = String.format("Batch with the name=%s and programId=%d already exists",
+//                    batchDTO.getBatchName(), batchDTO.getProgramId());
+//            throw new DuplicateResourceFoundException(message);
+//        }
 
         Batch exisBatch = progBatchRepository.findById(batchId).orElseThrow(()-> new ResourceNotFoundException("Batch", "Id", batchId));
     	Batch batchDetailToUpdt = batchMapper.toBatch(batchDTO );

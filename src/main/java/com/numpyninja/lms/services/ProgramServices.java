@@ -125,10 +125,10 @@ public class ProgramServices {
 	//update based on programId
 	public ProgramDTO updateProgramById(Long programId,ProgramDTO program)throws ResourceNotFoundException
 	{
-		if(programRepository.existsByProgramName(program.getProgramName())){
-			String message = String.format("Program with name=%s already exists", program.getProgramName());
-			throw new DuplicateResourceFoundException(message);
-		}
+//		if(programRepository.existsByProgramName(program.getProgramName())){
+//			String message = String.format("Program with name=%s already exists", program.getProgramName());
+//			throw new DuplicateResourceFoundException(message);
+//		}
 
 		//Program updateLMSProgramEntity =null;
 		Program savedProgramEntity =null;
@@ -171,11 +171,12 @@ public class ProgramServices {
 	//update based on programName
 	public ProgramDTO updateProgramByName(String programName,ProgramDTO program)throws ResourceNotFoundException
 	{
-
-		if(programRepository.existsByProgramName(program.getProgramName())){
-			String message = String.format("Program with name=%s already exists", program.getProgramName());
-			throw new DuplicateResourceFoundException(message);
-		}
+		
+//
+//		if(programRepository.existsByProgramName(program.getProgramName())){
+//			String message = String.format("Program with name=%s already exists", program.getProgramName());
+//			throw new DuplicateResourceFoundException(message);
+//		}
 		
 		Program updateProgramEntity =null;
 		if(!(programName.isEmpty())) {
