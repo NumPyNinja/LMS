@@ -73,8 +73,9 @@ class ClassControllerTest extends AbstractTestController {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        ClassDto classDto1 = new ClassDto(1L, 1, 1, classDate, "Selenium1","Active",
-                "UO2", "Selenium1 Class", "OK",
+        ClassDto classDto1 = new ClassDto(1L, 1, 1, classDate, "Selenium1",
+                "Active","UO2", "Selenium1 Class", "OK",
+
                 "c:/ClassNotes",
                 "c:/RecordingPath");
         ClassDto classDto2 = new ClassDto(1L, 1, 1, classDate, "Selenium2","Active",
@@ -208,7 +209,7 @@ class ClassControllerTest extends AbstractTestController {
             given(classService.getClassesByBatchId(batchId)).willReturn(classDtoList);
 
             //when
-            ResultActions response = mockMvc.perform(get("/classesByBatch/{batchId}", batchId));
+            ResultActions response = mockMvc.perform(get("/classesbyBatch/{batchId}", batchId));
 
             //then
             response.andExpectAll(status().isOk())
@@ -228,7 +229,7 @@ class ClassControllerTest extends AbstractTestController {
             when(classService.getClassesByBatchId(ArgumentMatchers.any(Integer.class)))
                     .thenThrow(new ResourceNotFoundException(message));
             //when
-            ResultActions response = mockMvc.perform(get("/classesByBatch/{batchId}", batchId));
+            ResultActions response = mockMvc.perform(get("/classesbyBatch/{batchId}", batchId));
 
             //then
             response.andExpectAll(status().isNotFound(),
@@ -416,7 +417,7 @@ class ClassControllerTest extends AbstractTestController {
         }
 
 
-   }
+    }
 
     @Nested
     class DeleteOperation {

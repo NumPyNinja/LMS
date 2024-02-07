@@ -94,7 +94,7 @@ class AttendanceServicesTest {
 		User user = new User("U03", "Steve", "Jobs", "", (long) 1234567890, "CA", "PST", "@stevejobs",
 				"", "", "", "Citizen", timestamp, timestamp);
 		Class class2 = new Class ((long) 7, batch, 4, dueDate,
-                "Selenium","Active", user, "Selenium Class", "OK",
+                "Selenium", "Active",user, "Selenium Class", "OK",
                 "c:/ClassNotes",
                 "c:/Recordings", timestamp, timestamp);
 		 mockAttendance = new Attendance(7L, class2, user, "Present", timestamp, timestamp, java.time.LocalDate.now());
