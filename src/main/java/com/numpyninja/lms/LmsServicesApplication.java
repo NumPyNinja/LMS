@@ -35,7 +35,7 @@ public class LmsServicesApplication {
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
 				.allowedOrigins(frontEndURL)
-					.allowedOrigins("https://lms-frontend.herokuapp.com/login")
+					.allowedOrigins("https://lms-frontend.herokuapp.com/")
 						.allowedOrigins("http://localhost:4200")
 				.allowedMethods("GET","POST","PUT","PATCH","DELETE");
 			}
