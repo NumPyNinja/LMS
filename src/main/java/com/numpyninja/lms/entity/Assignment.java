@@ -63,7 +63,7 @@ public class Assignment {
     private Batch batch;
 
 	@ManyToOne (fetch = FetchType.LAZY)
-	@JoinColumn(name="a_cs_id", nullable=false)
+	@JoinColumn(name="a_cs_id")
 	private Class aclass;
 
 	@ManyToOne (fetch=FetchType.LAZY)
