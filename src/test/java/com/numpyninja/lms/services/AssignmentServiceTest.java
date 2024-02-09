@@ -13,6 +13,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.numpyninja.lms.entity.*;
+import com.numpyninja.lms.entity.Class;
 import com.numpyninja.lms.repository.UserRepository;
 import com.numpyninja.lms.repository.UserRoleMapRepository;
 import com.numpyninja.lms.util.AssignmentCreatedUpdatedEvent;
@@ -34,6 +35,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.numpyninja.lms.dto.AssignmentDto;
+import com.numpyninja.lms.dto.ClassDto;
 import com.numpyninja.lms.exception.DuplicateResourceFoundException;
 import com.numpyninja.lms.exception.ResourceNotFoundException;
 import com.numpyninja.lms.mappers.AssignmentMapper;
@@ -98,18 +100,24 @@ class AssignmentServiceTest {
 		User user1 = new User("U02", "Elon", "Musk", "Steve",
 				1234567809L, "CA", "PST", "@elonmusk", "",
 				"", "", "Citizen", timestamp, timestamp);
-
+		
 		Batch batch = setMockBatch();
+		
+		Class class1 = new Class(1L, batch, 1,timestamp, "Selenium1",
+                "Active",user1, "Selenium1 Class", "OK",
+                "c:/ClassNotes",
+                "c:/RecordingPath", timestamp, timestamp);
+	
 
 		mockAssignment = new Assignment(1L, "Test Assignment", "Junit test",
 				"practice", dueDate, "Filepath1", "Filepath2",
-				"Filepath3", "Filepath4", "Filepath5", batch, user, user1,
+				"Filepath3", "Filepath4", "Filepath5", batch,class1, user, user1,
 				timestamp, timestamp);
 
 		mockAssignmentDto = new AssignmentDto(1L, "Test Assignment",
-				"Junit test", "practice", dueDate, "Filepath1",
+				"Junit test", "practice", timestamp, "Filepath1",
 				"Filepath2", "Filepath3", "Filepath4",
-				"Filepath5", 1, "U01", "U02");
+				"Filepath5", 1,1L, "U01", "U02");
 
 		mockUserRoleMaps = new ArrayList<UserRoleMap>();
 

@@ -8,7 +8,11 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import com.numpyninja.lms.dto.ClassDto;
 import com.numpyninja.lms.entity.*;
+import com.numpyninja.lms.entity.Class;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,6 +53,11 @@ public class AssignmentSubmitRepositoryTest {
 
 		Batch batch = new Batch(1, "SDET 1", "SDET Batch 1", "Active", program,
 				5, timestamp, timestamp);
+		
+		ClassDto class1 = new ClassDto(1L, 1, 1, timestamp, "Selenium1",
+                "Active","UO2", "Selenium1 Class", "OK",
+                "c:/ClassNotes",
+                "c:/RecordingPath");
 
 		User user = new User("U01", "Steve", "Jobs", "",
 				1234567890L, "CA", "PST", "@stevejobs", "",
@@ -58,18 +67,13 @@ public class AssignmentSubmitRepositoryTest {
 				1234567809L, "CA", "PST", "@elonmusk", "",
 				"", "", "Citizen", timestamp, timestamp);
 
-		Assignment assignment = new Assignment(20L, "Test Assignment",
-				"Junit test", "practice", dueDate, "Filepath1",
-				"Filepath2", "Filepath3", "Filepath4",
-				"Filepath5", batch, user, user1, timestamp, timestamp);
-
 		Assignment assignment1 = new Assignment(20L, "Test Assignment",
 				"Junit test", "practice", dueDate, "Filepath1",
 				"Filepath2", "Filepath3", "Filepath4",
-				"Filepath5", batch, user1, user1, timestamp, timestamp);
+				"Filepath5", batch, null, user1, user1, timestamp, timestamp);
 
 
-		AssignmentSubmit assignmentSubmit = new AssignmentSubmit(1L, assignment, user,
+		AssignmentSubmit assignmentSubmit = new AssignmentSubmit(1L, assignment1, user,
 				"Assignement Submissions", "Assignment Submit for test", "Filepath1",
 				"Filepath2", "Filepath3", "Filepath4",
 				"Filepath5", Timestamp.valueOf(LocalDateTime.now()), "U01", Timestamp.valueOf(LocalDateTime.now()), 250, Timestamp.valueOf(LocalDateTime.now()), Timestamp.valueOf(LocalDateTime.now()));
