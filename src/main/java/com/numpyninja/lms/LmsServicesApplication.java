@@ -34,7 +34,7 @@ public class LmsServicesApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry.addMapping("/**")
-				.allowedOrigins(frontEndURL)
+				.allowedOrigins(frontEndURL,"http://localhost:4200")
 				.allowedMethods("GET","POST","PUT","PATCH","DELETE");
 			}
 		};
