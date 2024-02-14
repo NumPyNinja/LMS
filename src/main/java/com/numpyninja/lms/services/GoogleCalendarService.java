@@ -221,7 +221,7 @@ public class GoogleCalendarService {
 				endDate.setDateTime(new DateTime(eventRequest.getEventEndDateTime()));
 				existingEvent.setEnd(endDate);
 	
-				events.update(CALENDAR_ID, eventId, existingEvent);
+				events.update(CALENDAR_ID, eventId, existingEvent).execute();
 			}
 			return GCalendarEventsMapper.mapToGCalendarEventResponseDTO(existingEvent);
 			
