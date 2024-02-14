@@ -48,6 +48,7 @@ public class KeyService {
 			byte[] secretBytes = secretFromEnv.getBytes(StandardCharsets.UTF_8); // Convert to byte array
 			//takes the byte array secretBytes, assumed to contain valid key material for AES encryption,
 			// and creates a SecretKey object ready to be used for AES encryption or decryption operations
+			environmentalKeyStore(secretFromEnv);
 			SecretKey secret = new SecretKeySpec(secretBytes, "AES");//Advanced Encryption Standard
 			logger.info("Using secret from environmental variable.");
 			return secret;
@@ -56,6 +57,7 @@ public class KeyService {
 			if (encodedKey.isEmpty()) {
 				throw new Exception("Key is not present in the database.");
 			}
+			storeKey();
 			SecretKey secret = new SecretKeySpec(encodedKey.get().getKey(), "AES");
 			logger.info("Using secret from the database.");
 			return secret;
@@ -68,6 +70,15 @@ public class KeyService {
 		String inputFile = "service_account/secret";
 		logger.info("Fetching credentials from file: {}", inputFile);
 		BufferedInputStream fis = (BufferedInputStream) ClassLoader.getSystemResourceAsStream(inputFile);
+		byte[] content = fis.readAllBytes();
+		com.numpyninja.lms.entity.Key key = new com.numpyninja.lms.entity.Key();
+		key.setKey(content);
+		key.setId(1);
+		keyRepo.save(key);
+	}
+	public void environmentalKeyStore(String secretFromEnv) throws IOException {
+		logger.info("Fetching credentials from environmental variables: {}", secretFromEnv);
+		BufferedInputStream fis = (BufferedInputStream) ClassLoader.getSystemResourceAsStream(secretFromEnv);
 		byte[] content = fis.readAllBytes();
 		com.numpyninja.lms.entity.Key key = new com.numpyninja.lms.entity.Key();
 		key.setKey(content);
