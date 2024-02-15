@@ -116,7 +116,6 @@ public class KeyService {
 		catch (Exception e) {
 			logger.error("Error occurred while getting credentials:", e);
 			// Log other relevant details like method name, input parameters, etc.
-			logger.info("method name: getCredentialsAsStream");
 			throw new GCalendarIOException("Failed to get credentials: " + e.getMessage());
 		}
 	}
@@ -124,7 +123,6 @@ public class KeyService {
 	// Return the decrypted file as Stream
 		private InputStream doCryptoToStream(int cipherMode, Key key) throws CryptoException {
 			try {
-				logger.info("In doCryptoToStream method ");
 				Cipher cipher = Cipher.getInstance("AES");
 				cipher.init(cipherMode, key);
 

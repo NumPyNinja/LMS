@@ -67,9 +67,7 @@ public class GoogleCalendarService {
 		GoogleCredentials credential;
 
 		try {
-			logger.info("Entering getServiceCredentials()");
 			InputStream credentialsStream = keyService.getCredentialsAsStream();
-			logger.info("Fetching credentials..."+credentialsStream);
 			credential = GoogleCredentials
 					.fromStream(credentialsStream)
 					.createScoped(Collections.singletonList(CalendarScopes.CALENDAR));
@@ -81,7 +79,6 @@ public class GoogleCalendarService {
 		}
 		// .createDelegated("numpyninja01@gmail.com");
 		credential.refreshIfExpired();
-		logger.info("Exiting getServiceCredentials()");
 		logger.info("credential:" + credential);
 		return credential;
 	}
@@ -89,7 +86,6 @@ public class GoogleCalendarService {
 	//Initialize google calendar service
 	private Calendar getCalendarService( GoogleCredentials googleCredential) throws FileNotFoundException, IOException, GeneralSecurityException 
 	{
-		logger.info("Entering getCalendarService()");
 		//Uses HttpCredentialsAdapter to convert GoogleCredentials to an HttpRequestInitializer.
 		HttpRequestInitializer requestInitializer = new HttpCredentialsAdapter(googleCredential);
 		HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
@@ -97,7 +93,6 @@ public class GoogleCalendarService {
 		
 		Calendar calendar = new Calendar.Builder(httpTransport, JSON_FACTORY, requestInitializer)
 				.setApplicationName(APPLICATION_NAME).build();
-		logger.info("Exiting getCalendarService()");
 		return calendar;
 	}
 
