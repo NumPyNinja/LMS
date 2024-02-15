@@ -22,6 +22,7 @@ import javax.validation.Validator;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AssignmentSubmitService {
@@ -362,6 +363,106 @@ public class AssignmentSubmitService {
         	throw new ResourceNotFoundException("Submissions for Program Id: "+programId+ " Not found");
         }
     }
-     	
 
+
+    public double getGradesMeanByBatchId(Integer batchId) {
+    	
+		List<Integer> gradeList = new ArrayList<>();			
+		
+		List<AssignmentSubmit> assignmentSubmits = assignmentSubmitRepository.findByAssignment_Batch_BatchId(batchId);
+        if (assignmentSubmits.isEmpty()) {
+            throw new ResourceNotFoundException("Assignments with grades does not exist for Batch ID : "+batchId);
+        }
+        try {
+			for (AssignmentSubmit asgnmnt :  assignmentSubmits) {			
+				gradeList.add(asgnmnt.getGrade());
+			}	
+			if (gradeList.size()== 1) 
+				return gradeList.get(0);
+			else
+				return gradeList.stream().mapToDouble(Integer::doubleValue).average().orElse(0.0);
+		}catch(Exception e){
+			throw new ResourceNotFoundException("can't find mean of batch: "+batchId);
+		}
+    }
+
+	public double getGradesMedianByBatchId(Integer batchId) {
+		List<Integer> gradeList = new ArrayList<>();
+		
+		List<AssignmentSubmit> assignmentSubmits = assignmentSubmitRepository.findByAssignment_Batch_BatchId(batchId);
+       if (assignmentSubmits.isEmpty()) {
+           throw new ResourceNotFoundException("Assignments with grades does not exist for Batch ID : "+batchId);
+       }	
+       try {
+    	   for (AssignmentSubmit asgnmnt :  assignmentSubmits) {			
+   				gradeList.add(asgnmnt.getGrade());
+   		   }
+    	   if (gradeList.size()== 1) 
+				return gradeList.get(0);
+		   else{			
+				Collections.sort(gradeList);
+				int length = gradeList.size();
+				int middle = length/2;
+				if (length%2 == 1) { 
+			        return gradeList.get(middle);
+			    } else {
+			        return (gradeList.get(middle-1) + gradeList.get(middle)) / 2.0;
+			    }
+		   }
+       }catch (Exception e) {
+    	   throw new ResourceNotFoundException("can't find median of batch: "+batchId);
+       }
+	}
+
+
+    public double getGradeMeanByClassId(Long csId) {
+
+        List<AssignmentSubmit> assignmentSubmits = assignmentSubmitRepository.findByAssignment_Aclass_CsId(csId);
+        if(assignmentSubmits.isEmpty()){
+            throw new ResourceNotFoundException("Assignments with grades does not exist for class Id: "+ csId);
+        }
+
+        List<Integer> classGradesList = assignmentSubmits.stream()
+                .map(AssignmentSubmit::getGrade)
+                .collect(Collectors.toList());
+
+        if(classGradesList.isEmpty()) {
+            throw new ResourceNotFoundException("No grades found for class Id: " + csId);
+        }
+
+        return classGradesList.size() == 1 ? classGradesList.get(0) : classGradesList
+                .stream()
+                .mapToDouble(Integer::doubleValue)
+                .average()
+                .orElseThrow(() -> new ResourceNotFoundException("Can't find mean of class: " + csId));
+    }
+
+
+    public double getGradesMedianByClassId(Long csId) {
+
+        List<AssignmentSubmit> assignmentSubmits = assignmentSubmitRepository.findByAssignment_Aclass_CsId(csId);
+        if(assignmentSubmits.isEmpty()){
+            throw new ResourceNotFoundException("Assignments with grades does not exist for class Id: "+ csId);
+        }
+
+        List<Integer> classGradesList = assignmentSubmits.stream()
+                .map(AssignmentSubmit::getGrade)
+                .collect(Collectors.toList());
+
+        if(classGradesList.isEmpty()) {
+            throw new ResourceNotFoundException("No grades found for class Id: " + csId);
+        }
+
+        if(classGradesList.size() == 1) {
+            return  classGradesList.get(0);
+        } else {
+            Collections.sort(classGradesList);
+            int length = classGradesList.size();
+            int middle = length / 2;
+
+           return Optional.of(length % 2 == 1 ?  classGradesList.get(middle) :
+                    (classGradesList.get(middle-1) + classGradesList.get(middle)) / 2.0)
+                            .orElseThrow(() -> new ResourceNotFoundException("Can't find median of class: " + csId));
+        }
+    }
 }

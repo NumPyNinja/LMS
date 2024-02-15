@@ -6,6 +6,7 @@ import com.numpyninja.lms.dto.LoginDto;
 import com.numpyninja.lms.entity.EmailDetails;
 import com.numpyninja.lms.entity.User;
 import com.numpyninja.lms.entity.UserLogin;
+import com.numpyninja.lms.entity.UserRoleMap;
 import com.numpyninja.lms.exception.ResourceNotFoundException;
 import com.numpyninja.lms.repository.UserLoginRepository;
 import com.numpyninja.lms.repository.UserRepository;
@@ -22,10 +23,7 @@ import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -132,10 +130,13 @@ public class UserLoginService {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
+        Optional<UserLogin> userLogin = userLoginRepository.findByUserLoginEmailIgnoreCase(loginDto.getUserLoginEmailId());
+        String status = userLogin.get().getLoginStatus();
+
         return new JwtResponseDto(jwt,
                 userDetailsImpl.getUserId(),
                 loginDto.getUserLoginEmailId(),
-                roles);
+                roles,status);
     }
 
 
@@ -220,7 +221,13 @@ public class UserLoginService {
 			UserLogin userLogin = userOptional.get();
 			String userId = userLogin.getUserId();
             Optional<User> user = userRepository.findById(userId);
-            if (user.isPresent()) { 
+           List<UserRoleMap> userRoleMaps = userRoleMapRepository.findUserRoleMapsByUserUserId(userId);
+                List<String> userRoles = new ArrayList<>();
+                for(UserRoleMap userRoleMap  : userRoleMaps)
+                {
+                    userRoles.add(userRoleMap.getRole().getRoleName());
+                }
+            if (user.isPresent()) {
             User userDetails = user.get();
            
 			if ("active".equalsIgnoreCase(userLogin.getLoginStatus())) {
@@ -240,12 +247,16 @@ public class UserLoginService {
 									"Please click on link to generate new password", model));
 					System.out.println(emailMessage);
 					forgotPwdDto.setEmail(userLoginEmail);
+                    forgotPwdDto.setUserId(userId);
+                    forgotPwdDto.setRoles(userRoles);
 					forgotPwdDto.setToken(token);
 					forgotPwdDto.setStatus("Email sent to your registered email Id");
 
 				} catch (Exception e) {
 					e.printStackTrace();
 					forgotPwdDto.setEmail(userLoginEmail);
+                    forgotPwdDto.setUserId(userId);
+                    forgotPwdDto.setRoles(userRoles);
 	                forgotPwdDto.setStatus("Failed to send email");
 	                forgotPwdDto.setToken(null);
 				}
@@ -253,11 +264,13 @@ public class UserLoginService {
 			} else {
 				forgotPwdDto.setEmail(userLoginEmail);
 				forgotPwdDto.setStatus("login inactive");
+                forgotPwdDto.setUserId(userId);
+                forgotPwdDto.setRoles(userRoles);
 				forgotPwdDto.setToken("null");
 			}
             }else {
 	            forgotPwdDto.setEmail(userLoginEmail);
-	            forgotPwdDto.setStatus("User not found");
+                forgotPwdDto.setStatus("User not found");
 	            forgotPwdDto.setToken(null);
 	        }
 		}else {
@@ -270,8 +283,8 @@ public class UserLoginService {
 	}
 
 	public String createEmailUrlConfirmPwdWithToken(String loginEmail, String token) {
-		final String url = UriComponentsBuilder.fromHttpUrl(getFrontendURL()).path("/reset-password")
-				.queryParam("token", token).queryParam("email",loginEmail).toUriString();
+		final String url = UriComponentsBuilder.fromHttpUrl(getFrontendURL()).path("/reset-password").queryParam("email",loginEmail)
+				.queryParam("token", token).toUriString();
 
 		return url;
 	}

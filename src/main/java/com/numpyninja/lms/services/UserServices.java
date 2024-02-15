@@ -693,6 +693,11 @@ public class UserServices implements UserDetailsService {
         Role existingUserRole = roleRepository.findById(roleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Role", "Id", roleId));
 
+        if(existingUserRole.getRoleId().equalsIgnoreCase("R01"))
+        {
+            throw new InvalidDataException("User with Role Admin cannot be assigned to a Program/Batch");
+        }
+
         boolean isPresentUserAndRole = userRoleMapRepository.
                 existsUserRoleMapByUser_UserIdAndRole_RoleIdAndUserRoleStatusEqualsIgnoreCase(userId, roleId,
                         "Active");
@@ -938,9 +943,16 @@ public class UserServices implements UserDetailsService {
         return roleRepository.findAll();
     }
 
+    public List<User> getUserWithActiveStatus( ) {
+        List<UserRoleMap> userLogin1=userRoleMapRepository.findByUserRoleStatus("Active");
+        List<String> userId = userLogin1.stream().map(UserRoleMap::getUserId).collect(Collectors.toList());
+        System.out.println(userId);
+        return userRepository.findByUserId(userId);
+    }
+
 	/*
 	 * public UserDto getAllUsersById(String Id) throws ResourceNotFoundException {
-	 * Optional<User> userById = userRepository.findById(Id); if(userById.isEmpty())
+	 * Optional<User> userById = userRepository.findById(Id); if(userById.isEmpty()
 	 * { throw new ResourceNotFoundException("User Id " + Id +" not found"); } else
 	 * { UserDto userDto = userMapper.userDto(userById.get()); return userDto; } }
 

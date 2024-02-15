@@ -81,7 +81,7 @@ class AssignmentControllerTest extends AbstractTestController {
         mockAssignmentDto = new AssignmentDto(1L, "Test Assignment",
                 "Junit test", "practice", dueDate, "Filepath1",
                 "Filepath2", "Filepath3", "Filepath4",
-                "Filepath5", 1, "U02", "U01");
+                "Filepath5", 1,1L, "U02", "U01");
     }
 
     @DisplayName("test for creating a new assignment")

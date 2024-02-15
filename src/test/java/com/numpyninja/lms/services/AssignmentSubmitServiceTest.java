@@ -3,6 +3,7 @@ package com.numpyninja.lms.services;
 import com.numpyninja.lms.dto.AssignmentSubmitDTO;
 import com.numpyninja.lms.dto.AttendanceDto;
 import com.numpyninja.lms.entity.*;
+import com.numpyninja.lms.entity.Class;
 import com.numpyninja.lms.exception.InvalidDataException;
 import com.numpyninja.lms.exception.ResourceNotFoundException;
 import com.numpyninja.lms.mappers.AssignmentSubmitMapper;
@@ -96,6 +97,11 @@ public class AssignmentSubmitServiceTest {
                 timestamp2,"U03",timestamp3,80);
 
         Batch batch = setMockBatch();
+        
+		Class class1 = new Class(1L, batch, 1,timestamp1, "Selenium1",
+                "Active",mockUser, "Selenium1 Class", "OK",
+                "c:/ClassNotes",
+                "c:/RecordingPath", timestamp1, timestamp1);
 
         mockUser = new User("U03", "Steve", "Jobs", "", (long) 1234567890, "CA", "PST", "@stevejobs",
                 "", "", "", "Citizen", timestamp1, timestamp2);
@@ -104,8 +110,8 @@ public class AssignmentSubmitServiceTest {
                 "", "", "Citizen", timestamp1, timestamp2);
 
         mockAssignment  = new Assignment(1L, "Test Assignment", "Junit test",
-                "practice", dueDate, "Filepath1", "Filepath2",
-                "Filepath3", "Filepath4", "Filepath5", batch, mockUser, mockUser1,
+                "practice", timestamp2, "Filepath1", "Filepath2",
+                "Filepath3", "Filepath4", "Filepath5", batch, class1, mockUser, mockUser1,
                 timestamp1, timestamp1);
 
         mockAssignmentSubmit1 = new AssignmentSubmit(4L,mockAssignment,mockUser,"Selenium assignment Submission",

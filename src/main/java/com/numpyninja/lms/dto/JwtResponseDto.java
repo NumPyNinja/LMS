@@ -21,11 +21,12 @@ public class JwtResponseDto {
     private List<String> roles;
     private String status;
 
-    public JwtResponseDto(String accessToken, String userId, String email, List<String> roles) {
+    public JwtResponseDto(String accessToken, String userId, String email, List<String> roles,String status) {
         this.token = accessToken;
         this.userId = userId;
         this.email = email;
         this.roles = roles;
+        this.status = status;
     }
 
 }

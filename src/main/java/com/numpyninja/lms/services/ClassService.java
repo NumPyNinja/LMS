@@ -111,9 +111,9 @@ public class ClassService {
 	public ClassDto createClass(ClassDto newClassDto) throws DuplicateResourceFoundException
 	{
 // Check for duplicate class Topic
-		if (classRepository.existsByClassTopicIgnoreCase(newClassDto.getClassTopic())) {
-			throw new DuplicateResourceFoundException("Class", " Class Topic", newClassDto.getClassTopic());
-		}
+		//if (classRepository.existsByClassTopicIgnoreCase(newClassDto.getClassTopic())) {
+			//throw new DuplicateResourceFoundException("Class", " Class Topic", newClassDto.getClassTopic());
+		//}
 
 		int batchId = newClassDto.getBatchId();
 		String staffId = newClassDto.getClassStaffId();
@@ -336,6 +336,9 @@ public class ClassService {
 
 		if(StringUtils.hasLength(modifiedClassDTO.getClassTopic()))
 			savedClass.setClassTopic(modifiedClassDTO.getClassTopic());
+
+		if(StringUtils.hasLength(modifiedClassDTO.getClassStatus()))
+			savedClass.setClassStatus(modifiedClassDTO.getClassStatus());
 		
 
 		if(modifiedClassDTO.getClassNo().getClass() == Integer.class)
@@ -362,8 +365,10 @@ public class ClassService {
 			Boolean value= classRepository.existsById(classId);
 			if(value)
 			{
-				classRepository.deleteById(classId);
-				return value;
+				Class classEntity = classRepository.findById(classId).get();
+				classEntity.setClassStatus("Inactive");
+				classRepository.save(classEntity);
+				return true;
 			}
 			else
 			{

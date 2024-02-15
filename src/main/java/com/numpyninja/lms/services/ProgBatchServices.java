@@ -73,8 +73,14 @@ public class ProgBatchServices {
     	Long programId = batchDTO.getProgramId();
     	Batch newBatch = batchMapper.toBatch(batchDTO );
     	Program program = programRepository.findById( programId ).orElseThrow(()-> new ResourceNotFoundException("Program", "Id", programId));
-    	newBatch.setProgram(program);
-    	
+
+        if(program.getProgramStatus().equalsIgnoreCase("Inactive"))
+        {
+            throw new InvalidDataException("Batch cannot be created for a Program with Inactive status");
+        }
+        else {
+            newBatch.setProgram(program);
+        }
     	//check null values
     	boolean batchstatus = batchDTO.getBatchStatus().equalsIgnoreCase("null");
     	if (batchstatus)
@@ -94,11 +100,11 @@ public class ProgBatchServices {
     //Update new Batch                    
     public BatchDTO updateBatch(BatchDTO batchDTO, Integer batchId) {
 
-        if(progBatchRepository.existsByBatchNameAndProgramProgramId(batchDTO.getBatchName(),batchDTO.getProgramId())){
-            String message = String.format("Batch with the name=%s and programId=%d already exists",
-                    batchDTO.getBatchName(), batchDTO.getProgramId());
-            throw new DuplicateResourceFoundException(message);
-        }
+//        if(progBatchRepository.existsByBatchNameAndProgramProgramId(batchDTO.getBatchName(),batchDTO.getProgramId())){
+//            String message = String.format("Batch with the name=%s and programId=%d already exists",
+//                    batchDTO.getBatchName(), batchDTO.getProgramId());
+//            throw new DuplicateResourceFoundException(message);
+//        }
 
         Batch exisBatch = progBatchRepository.findById(batchId).orElseThrow(()-> new ResourceNotFoundException("Batch", "Id", batchId));
     	Batch batchDetailToUpdt = batchMapper.toBatch(batchDTO );
