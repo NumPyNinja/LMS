@@ -18,6 +18,7 @@ import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @Api(tags = "User Login Controller", description = "User Login Authentication")
@@ -50,6 +51,12 @@ public class UserLoginController {
     @ApiOperation("User Sign In")
     public ResponseEntity<JwtResponseDto> signin(@Valid @RequestBody LoginDto loginDto) {
         return ResponseEntity.ok(userLoginService.signin(loginDto));
+    }
+    @GetMapping("/fetch-emails")
+    @ApiOperation("User LoginEmail List")
+    public ResponseEntity<List<String>> getAllUserLogins(){
+        var allUserLogins = userLoginService.findAllUserLoginEmails();
+        return ResponseEntity.ok(allUserLogins);
     }
 
 
