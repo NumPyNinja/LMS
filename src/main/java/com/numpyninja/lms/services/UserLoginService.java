@@ -3,6 +3,7 @@ package com.numpyninja.lms.services;
 import com.numpyninja.lms.dto.EmailDto;
 import com.numpyninja.lms.dto.JwtResponseDto;
 import com.numpyninja.lms.dto.LoginDto;
+import com.numpyninja.lms.dto.UserLoginDto;
 import com.numpyninja.lms.entity.EmailDetails;
 import com.numpyninja.lms.entity.User;
 import com.numpyninja.lms.entity.UserLogin;
@@ -66,6 +67,21 @@ public class UserLoginService {
                             UserRoleMapRepository userRoleMapRepository) {
         this.userLoginRepository = userLoginRepository;
         this.userRoleMapRepository = userRoleMapRepository;
+    }
+    public List<String> findAllUserLoginEmails() {
+        var userLoginList=userLoginRepository.findAll();
+        return userLoginList.stream().map(this::mapToUserLoginDto)
+                .filter(userLoginDto -> userLoginDto.getLoginStatus().equalsIgnoreCase("Active"))
+                .map(UserLoginDto::getUserLoginEmail)
+                .collect(Collectors.toList());
+
+    }
+    public UserLoginDto mapToUserLoginDto (UserLogin userLogin){
+        UserLoginDto userLoginDto = new UserLoginDto();
+        userLoginDto.setLoginStatus(userLogin.getLoginStatus());
+        userLoginDto.setPassword(userLogin.getPassword());
+        userLoginDto.setUserLoginEmail(userLogin.getUserLoginEmail());
+        return userLoginDto;
     }
 
 
