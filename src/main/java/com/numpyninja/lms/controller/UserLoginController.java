@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserCache;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -74,8 +75,13 @@ public class UserLoginController {
     }
 
     @PostMapping("/resetPassowrd")
-    public ResponseEntity<ApiResponse> resetPassword(@Valid @RequestBody LoginDto logindto,
+    public ResponseEntity<ApiResponse> resetPassword(@Valid @RequestBody LoginDto logindto, BindingResult bindingResult,
                                                      @RequestHeader(value = "Authorization") String token) {
+        if (bindingResult.hasFieldErrors("userLoginEmailId")) {
+            return new ResponseEntity<>(new ApiResponse("Email Id and Password is mandatory", false), HttpStatus.BAD_REQUEST);
+        }
+        if(logindto.getPassword().isBlank())
+            return  new ResponseEntity<ApiResponse>(new ApiResponse("Password is Blank",false),HttpStatus.BAD_REQUEST);
         String status = this.userLoginService.resetPassword(logindto, token);
         if (status.equalsIgnoreCase("Password saved"))
             return new ResponseEntity<ApiResponse>(new ApiResponse(status, true), HttpStatus.OK);

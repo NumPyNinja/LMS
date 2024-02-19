@@ -39,8 +39,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
@@ -130,10 +133,10 @@ public class UserLoginControllerTest extends AbstractTestController {
     public void given_ForgotPassword_UserWithValidEmail_ThenReturnJwtResponse() throws Exception {
         EmailDto emailDto = new EmailDto();
         emailDto.setUserLoginEmailId("Nisha@gmail.com");
-        JwtResponseDto jwtResponseDto = JwtResponseDto.builder().email("Nisha@gmail.com")
+        JwtResponseDto jwtResponseDto = JwtResponseDto.builder().email("Nisha@gmail.com").userId("U01").roles(Collections.singletonList("R01")).status("Email sent to your registered email Id")
                        .token("eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzaGVudGhhbWFyYWkubjJAZ21haWwuY29YXq9-_xfLYNMMhapvw").build();
         //given
-        given( userLoginService.forgotPasswordConfirmEmail(emailDto)).willReturn( jwtResponseDto);
+        given( userLoginService.forgotPasswordConfirmEmail(emailDto)).willReturn(jwtResponseDto);
 
         //When
         ResultActions response = mockMvc.perform(post("/login/forgotpassword/confirmEmail")
@@ -248,13 +251,17 @@ public class UserLoginControllerTest extends AbstractTestController {
     void testResetPassword_ValidToken_PasswordSaved_ReturnsOk() {
         //given
         LoginDto loginDto = new LoginDto();
+        loginDto.setUserLoginEmailId("John.Matthew@gmail.com");
+        loginDto.setPassword("test");
         UserLoginController userLoginController = new UserLoginController(userLoginService);
         String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJuaXRAZ21haWwuY29tIiwiaWF0IjoxNjg2MTQzMjYwLCJleHAiOjE2ODYzMTYwNjB9.QvVEiYYLxxRjAqAyrZJdSROWAQ3gP0o5uxez_Ar1Z-9MFkRXuSXt3ANok_LaZmzjKYa9d2q5DDvn3v1npgR3Kw";
         String status = "Password saved";
+        BindingResult bindingResult = new org.springframework.validation.BeanPropertyBindingResult(loginDto, "loginDto");
+        bindingResult.addError(new ObjectError("loginDto", "EmailId is mandatory"));
         when(userLoginService.resetPassword(loginDto, token)).thenReturn(status);
 
         // when
-        ResponseEntity<ApiResponse> response = userLoginController.resetPassword(loginDto, token);
+        ResponseEntity<ApiResponse> response = userLoginController.resetPassword(loginDto,bindingResult, token);
 
         // then
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());

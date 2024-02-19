@@ -79,8 +79,8 @@ public class UserLoginControllerIT {
     @Order(1)
     public void testSignIn() throws Exception {
         final LoginDto loginDto = new LoginDto();
-        loginDto.setUserLoginEmailId("ravi@gmail.com");
-        loginDto.setPassword("Ravi@123");
+        loginDto.setUserLoginEmailId("John.Matthew@gmail.com");
+        loginDto.setPassword("John123");
 
         String jsonRequest = obj.writeValueAsString(loginDto);
         final MvcResult mvcResult = mockMvc.perform(post("/lms/login").contextPath("/lms")
@@ -197,7 +197,7 @@ public class UserLoginControllerIT {
     @Order(7)
     public void testForgotPasswordForEmailId() throws Exception {
         final EmailDto emailDto = new EmailDto();
-        emailDto.setUserLoginEmailId("ravi@gmail.com");
+        emailDto.setUserLoginEmailId("John.Matthew@gmail.com");
 
         String jsonRequest = obj.writeValueAsString(emailDto);
         final MvcResult mvcResult = mockMvc.perform(post("/lms/login/forgotpassword/confirmEmail")
