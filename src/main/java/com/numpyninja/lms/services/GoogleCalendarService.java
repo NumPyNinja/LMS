@@ -63,25 +63,30 @@ public class GoogleCalendarService {
 
 	//Load credentials from file to GoogleCredentials Object
 	private GoogleCredentials getServiceCredentials() throws FileNotFoundException, IOException {
+
 		GoogleCredentials credential;
+
 		try {
 			InputStream credentialsStream = keyService.getCredentialsAsStream();
 			credential = GoogleCredentials
 					.fromStream(credentialsStream)
 					.createScoped(Collections.singletonList(CalendarScopes.CALENDAR));
 			credentialsStream.close();
+			logger.info("Credentials fetched successfully.");
 		} catch (Exception e) {
 			logger.error("Error: ", e);
 			throw new GCalendarIOException(e.getLocalizedMessage());
 		}
 		// .createDelegated("numpyninja01@gmail.com");
 		credential.refreshIfExpired();
+		logger.info("credential:" + credential);
 		return credential;
 	}
 	
 	//Initialize google calendar service
 	private Calendar getCalendarService( GoogleCredentials googleCredential) throws FileNotFoundException, IOException, GeneralSecurityException 
 	{
+		//Uses HttpCredentialsAdapter to convert GoogleCredentials to an HttpRequestInitializer.
 		HttpRequestInitializer requestInitializer = new HttpCredentialsAdapter(googleCredential);
 		HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
 		JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
@@ -211,7 +216,7 @@ public class GoogleCalendarService {
 				endDate.setDateTime(new DateTime(eventRequest.getEventEndDateTime()));
 				existingEvent.setEnd(endDate);
 	
-				events.update(CALENDAR_ID, eventId, existingEvent);
+				events.update(CALENDAR_ID, eventId, existingEvent).execute();
 			}
 			return GCalendarEventsMapper.mapToGCalendarEventResponseDTO(existingEvent);
 			

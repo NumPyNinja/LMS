@@ -19,6 +19,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import com.numpyninja.lms.exception.GCalendarIOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,20 +43,42 @@ public class KeyService {
 	private Logger logger = LoggerFactory.getLogger(KeyService.class);
 
 	private Key getKey() throws Exception {
-		Optional<com.numpyninja.lms.entity.Key> encodedKey = keyRepo.findById(Integer.valueOf(1));
-		if (!encodedKey.isPresent()) {
-			throw new Exception("Key is not present");
-
+		String secretFromEnv = System.getenv("GOOGLE_CALENDAR_KEY");
+		if (secretFromEnv != null && !secretFromEnv.isEmpty()) {
+			byte[] secretBytes = secretFromEnv.getBytes(StandardCharsets.UTF_8); // Convert to byte array
+			//takes the byte array secretBytes, assumed to contain valid key material for AES encryption,
+			// and creates a SecretKey object ready to be used for AES encryption or decryption operations
+			environmentalKeyStore(secretFromEnv);
+			SecretKey secret = new SecretKeySpec(secretBytes, "AES");//Advanced Encryption Standard
+			logger.info("Using secret from environmental variable.");
+			return secret;
+		} else {
+			Optional<com.numpyninja.lms.entity.Key> encodedKey = keyRepo.findById(Integer.valueOf(1));
+			if (encodedKey.isEmpty()) {
+				throw new Exception("Key is not present in the database.");
+			}
+			storeKey();
+			SecretKey secret = new SecretKeySpec(encodedKey.get().getKey(), "AES");
+			logger.info("Using secret from the database.");
+			return secret;
 		}
-		SecretKey secret = new SecretKeySpec(encodedKey.get().getKey(), "AES");
-		return secret;
 	}
 
 	//This code should be used for storing the key in the database
 	//This is not used all the time but, incase key needs to be re-written to DB, it should be done through this
 	public void storeKey() throws IOException {
 		String inputFile = "service_account/secret";
+		logger.info("Fetching credentials from file: {}", inputFile);
 		BufferedInputStream fis = (BufferedInputStream) ClassLoader.getSystemResourceAsStream(inputFile);
+		byte[] content = fis.readAllBytes();
+		com.numpyninja.lms.entity.Key key = new com.numpyninja.lms.entity.Key();
+		key.setKey(content);
+		key.setId(1);
+		keyRepo.save(key);
+	}
+	public void environmentalKeyStore(String secretFromEnv) throws IOException {
+		logger.info("Fetching credentials from environmental variables: {}", secretFromEnv);
+		BufferedInputStream fis = (BufferedInputStream) ClassLoader.getSystemResourceAsStream(secretFromEnv);
 		byte[] content = fis.readAllBytes();
 		com.numpyninja.lms.entity.Key key = new com.numpyninja.lms.entity.Key();
 		key.setKey(content);
@@ -80,18 +103,26 @@ public class KeyService {
 		}
 	}
 	public InputStream getCredentialsAsStream() throws Exception {
+			String credentialsFromEnv = System.getenv("GOOGLE_CREDENTIALS");
 		try {
-			return doCryptoToStream(Cipher.DECRYPT_MODE, getKey());
-		} catch (Exception e) {
-			logger.error("Error:",e);
-			throw new Exception("Failed to get credentils");
+			if (credentialsFromEnv != null && !credentialsFromEnv.isEmpty()) {
+				byte[] credentialBytes = credentialsFromEnv.getBytes(StandardCharsets.UTF_8);
+				return new ByteArrayInputStream(credentialBytes);
+			} else {
+
+				return doCryptoToStream(Cipher.DECRYPT_MODE, getKey());
+			}
+		}
+		catch (Exception e) {
+			logger.error("Error occurred while getting credentials:", e);
+			// Log other relevant details like method name, input parameters, etc.
+			throw new GCalendarIOException("Failed to get credentials: " + e.getMessage());
 		}
 	}
 
 	// Return the decrypted file as Stream
 		private InputStream doCryptoToStream(int cipherMode, Key key) throws CryptoException {
 			try {
-				
 				Cipher cipher = Cipher.getInstance("AES");
 				cipher.init(cipherMode, key);
 
