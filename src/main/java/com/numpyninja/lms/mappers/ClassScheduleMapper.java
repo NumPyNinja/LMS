@@ -18,6 +18,7 @@ public interface ClassScheduleMapper {
 	
 	@Mapping(source="batchInClass.batchId",target="batchId")
 	@Mapping(source="staffInClass.userId", target="classStaffId")
+	@Mapping(source="batchInClass.batchName",target="batchName")
 	ClassDto toClassSchdDTO(Class savedEntity);
 		
 		@InheritInverseConfiguration
