@@ -76,15 +76,15 @@ class ClassControllerTest extends AbstractTestController {
         ClassDto classDto1 = new ClassDto(1L, 1, 1, classDate, "Selenium1",
                 "Active","UO2", "Selenium1 Class", "OK",
                 "c:/ClassNotes",
-                "c:/RecordingPath");
+                "c:/RecordingPath","SDET01");
         ClassDto classDto2 = new ClassDto(1L, 1, 1, classDate, "Selenium2","Active",
                 "UO3", "Selenium2 Class", "OK",
                 "c:/ClassNotes",
-                "c:/RecordingPath");
+                "c:/RecordingPath","SDET01");
         ClassDto classDto3 = new ClassDto(1L, 1, 1, classDate, "Selenium3","Active",
                 "UO2", "Selenium3 Class", "OK",
                 "c:/ClassNotes",
-                "c:/RecordingPath");
+                "c:/RecordingPath", "SDET01");
         classDtoList = Arrays.asList(classDto1,classDto2,classDto3);
 
     }
@@ -353,7 +353,7 @@ class ClassControllerTest extends AbstractTestController {
             ClassDto updateClassDTO = new ClassDto(1L, 1, 1, date, "Selenium-01","Active",
                     "UO2", "Selenium1 Introduction Class", "OK",
                     "c:/ClassNotes",
-                    "c:/RecordingPath");
+                    "c:/RecordingPath", "SDET01");
             Long classId = 1L;
 
             given(classService.updateClassByClassId(ArgumentMatchers.any(Long.class),
@@ -378,7 +378,7 @@ class ClassControllerTest extends AbstractTestController {
             ClassDto updateClassDTO = new ClassDto(1L, 1, 1, date, "Selenium-01","Active",
                     "UO2", "Selenium1 Introduction Class", "OK",
                     "c:/ClassNotes",
-                    "c:/RecordingPath");
+                    "c:/RecordingPath", "SDET01");
             Long classId = 1L;
 
             given(classService.updateClassByClassId(ArgumentMatchers.any(Long.class),
@@ -402,7 +402,7 @@ class ClassControllerTest extends AbstractTestController {
             ClassDto updateClassDTO = new ClassDto(1L, 1, 1, date, "Selenium-01","Active",
                     "UO2", "Selenium1 Introduction Class", "OK",
                     "c:/ClassNotes",
-                    "c:/RecordingPath");
+                    "c:/RecordingPath","SDET01");
             when(classService.updateClassByClassId(ArgumentMatchers.any(Long.class),
                     ArgumentMatchers.any(ClassDto.class))).thenThrow(new ResourceNotFoundException(message));
 
