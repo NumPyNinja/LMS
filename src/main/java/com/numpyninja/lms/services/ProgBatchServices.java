@@ -12,11 +12,13 @@ import org.springframework.stereotype.Service;
 import com.numpyninja.lms.dto.BatchDTO;
 import com.numpyninja.lms.entity.Batch;
 import com.numpyninja.lms.entity.Program;
+import com.numpyninja.lms.entity.UserRoleProgramBatchMap;
 import com.numpyninja.lms.exception.DuplicateResourceFoundException;
 import com.numpyninja.lms.exception.ResourceNotFoundException;
 import com.numpyninja.lms.mappers.BatchMapper;
 import com.numpyninja.lms.repository.ProgBatchRepository;
 import com.numpyninja.lms.repository.ProgramRepository;
+import com.numpyninja.lms.repository.UserRoleProgramBatchMapRepository;
 
 @Service
 public class ProgBatchServices {
@@ -28,6 +30,9 @@ public class ProgBatchServices {
     
     @Autowired
     private BatchMapper batchMapper;
+    
+    @Autowired
+    private UserRoleProgramBatchMapRepository userRoleProgramBatchMapRepository;
     
     // method for All batch
     public List<BatchDTO> getAllBatches() {
@@ -139,15 +144,19 @@ public class ProgBatchServices {
     }
 
     public void deleteProgramBatch(Integer batchId) {
+    	
         if(batchId!=null) {
             Boolean value = progBatchRepository.existsById(batchId);
             if (value) {
-                Batch batchEntity = progBatchRepository.findById(batchId).get();
+            	Boolean result= checkForActiveUser(batchId);
+            	if (result.equals(true)) 
+            		throw new ResourceNotFoundException("Active user Present. Batch "+batchId+" cannot be deleted");
+            	
+            	Batch batchEntity = progBatchRepository.findById(batchId).get();
                 batchEntity.setBatchStatus("Inactive");
                 progBatchRepository.save(batchEntity);
-
-            } else {
-                System.out.println("No record found with batchId" + "  " + batchId);
+        	}
+            else {
                 throw new ResourceNotFoundException("No record found with batchId" + batchId);
             }
         }
@@ -155,7 +164,34 @@ public class ProgBatchServices {
             throw new InvalidDataException("BatchId is mandatory");
         }
     }
+    
+    public Boolean checkForActiveUser(int batchId) {
+    	
+    	Boolean activeUserPresent = false;
+    	List<UserRoleProgramBatchMap> userRoleProgramBatchMaps = userRoleProgramBatchMapRepository.findByBatch_BatchId(batchId);
+    	
+    	if(userRoleProgramBatchMaps.isEmpty()) {
+    		throw new ResourceNotFoundException("No Users present in the batch ");
+    	}
+    	for(UserRoleProgramBatchMap userRoleProgramBatchMap : userRoleProgramBatchMaps) {
+    		if (userRoleProgramBatchMap.getUserRoleProgramBatchStatus().equalsIgnoreCase("Active")) {
+    			activeUserPresent=true;
+    			break;
+    		}
+    	}
+    	return activeUserPresent; 
+
+    }
 
 }
+            
+            	
+            	
+                
+
+             
+    
+    
+   
 	
 
