@@ -434,6 +434,7 @@ public class UserControllerIT {
     @Test
     @Order(9)
     public void testGetOneById() throws Exception {
+        userId = "U219";
         final MvcResult mvcResult = mockMvc.perform(get("/lms/users/" + userId).contextPath("/lms")
                         .header("Authorization", "Bearer " + token)
                         .contentType("application/json"))
@@ -456,6 +457,7 @@ public class UserControllerIT {
         assertEquals("Active", userAllDto.getUserRoleMaps().get(0).getUserRoleStatus());
     }
 
+    @Test
     @Order(10)
     public void testGetUserByInvalidId() throws Exception {
         final MvcResult mvcResult = mockMvc.perform(get("/lms/users/" + "U12").contextPath("/lms")
@@ -475,6 +477,7 @@ public class UserControllerIT {
     @Test
     @Order(11)
     public void testUpdateUser() throws Exception {
+        userId = "U219";
         final UserDto userDto = new UserDto();
         userDto.setUserId(userId);
         userDto.setUserFirstName("Alex");
@@ -506,6 +509,7 @@ public class UserControllerIT {
     @Test
     @Order(12)
     public void testUpdateUserByInvalidId() throws Exception {
+        userId = "U12";
         final UserDto userDto = new UserDto();
         userDto.setUserId(userId);
         userDto.setUserFirstName("Alex");
@@ -840,6 +844,7 @@ public class UserControllerIT {
     @Test
     @Order(25)
     public void testUpdateUserLoginStatus() throws Exception {
+        userId = "U219";
         final UserLoginDto userLoginDto = new UserLoginDto();
         userLoginDto.setLoginStatus("Active");
         userLoginDto.setStatus("active");

@@ -213,13 +213,13 @@ public class UserServices implements UserDetailsService {
     }
 
     public UserAllDto getUserInfoById(String userId) {
-        User existingUser = userRepository.findById(userId)
+        UserLogin existingLoginUser = userLoginRepository.findByUserUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
 
         List<UserRoleMap> userRoleMaps = userRoleMapRepository.findUserRoleMapsByUserUserId(userId);
 
         UserAllDto userAllDto = UserAllDto.builder()
-                .userDto(userMapper.userDto(existingUser))
+                .userDto(userLoginMapper.toUserDto(existingLoginUser))
                 .userRoleMaps(userMapper.toUserRoleMapSlimDtos(userRoleMaps))
                 .build();
 
