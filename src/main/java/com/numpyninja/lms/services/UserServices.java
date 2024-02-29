@@ -583,7 +583,7 @@ public class UserServices implements UserDetailsService {
                 toUpdatedRole.setRole(userRole); //Role Id R01/R02/R03
                 toUpdatedRole.setUser(existingUser); //user Id U01/U02
                         				  
-                toUpdatedRole = userRoleMapRepository.save(toUpdatedRole);
+                toUpdatedRole = userRoleMapRepository.save(toUpdatedRole);                              
              }
           }
           else 
@@ -917,12 +917,12 @@ public class UserServices implements UserDetailsService {
     public List<UserDto> getUsersByRoleID(String roleId){
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new ResourceNotFoundException("RoleID " + roleId + " not found"));
-        List<UserRoleProgramBatchMap> userRoleProgramBatchMapList = userRoleProgramBatchMapRepository.findByRole_RoleId(roleId);
-        if (userRoleProgramBatchMapList.isEmpty()) {
+        List<UserRoleMap> userRoleMapList = userRoleMapRepository.findByRole_RoleId(roleId);
+        if (userRoleMapList.isEmpty()) {
             throw new ResourceNotFoundException("No Users found for the given role ID: " + roleId);
         }
-        List<UserDto> userdto=  userRoleProgramBatchMapList.stream()
-                .map(UserRoleProgramBatchMap::getUser)
+        List<UserDto> userdto=  userRoleMapList.stream()
+                .map(UserRoleMap::getUser)
                 .map(user -> userMapper.userDtos(Arrays.asList(user)).get(0))
                 .collect(Collectors.toList());
         return userdto;
