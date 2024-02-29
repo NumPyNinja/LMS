@@ -466,7 +466,16 @@ public class UserServices implements UserDetailsService {
             }
 
             User updatedUser = userRepository.save(toBeupdatedUser);
-            UserDto updatedUserDto = userMapper.userDto(updatedUser);
+
+            //Bug - returning null value for userLoginEmail in userDto repsonse
+            //Bugfix - returning the updated value of userLoginEmail on updating the userLoginEmail field
+            Optional<UserLogin> userLogin = userLoginRepository.findByUserUserId(userId);
+            userLogin.get().setUserId(updatedUser.getUserId());
+            userLogin.get().setUser(updatedUser);
+            userLogin.get().setUserLoginEmail(updateuserDto.getUserLoginEmail());
+            userLogin.get().setLastModTime(new Timestamp(utilDate.getTime()));
+            UserLogin toBeupdatedUserLogin = userLoginRepository.save(userLogin.get());
+            UserDto updatedUserDto = userLoginMapper.toUserDto(toBeupdatedUserLogin);
             return updatedUserDto;
         }
     }
