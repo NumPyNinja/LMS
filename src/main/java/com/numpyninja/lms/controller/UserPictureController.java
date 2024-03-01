@@ -23,14 +23,14 @@ import com.numpyninja.lms.services.UserPictureService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@RestController
+//@RestController
 @RequestMapping("/file")
 
 @Api(tags="User Picture Controller", description="User Picture CRUD Operations")
 public class UserPictureController {
 
 
-	@Autowired
+	//@Autowired
 	private UserPictureService userpictureservice;
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_STAFF')")
 	@PostMapping(path = "/userpicture", consumes = "application/json", produces = "application/json")

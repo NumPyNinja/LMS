@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiOperation;
 import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
-@RestController
+//@RestController
 @RequestMapping("/assignments")
 @Api(tags="Assignment Controller", description="Assignment CRUD Operations")
 public class AssignmentController {

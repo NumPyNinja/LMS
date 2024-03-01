@@ -19,7 +19,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 import java.util.List;
 
-@RestController
+//@RestController
 @RequestMapping("/assignmentsubmission")
 @Api(tags="Assignment Submission Controller", description="Assignment Submission CRUD Operations")
 public class AssignmentSubmitController {

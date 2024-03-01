@@ -15,7 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@RestController
+//@RestController
 @RequestMapping("/userSkill")
 @Api(tags="User Skill Controller", description="User Skill CRUD Operations")
 public class UserSkillController {

@@ -27,7 +27,7 @@ import com.numpyninja.lms.services.SkillMasterService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@RestController
+//@RestController
 @RequestMapping
 @Api(tags="Skill Master Controller", description="Skill Master CRUD Operations")
 public class SkillMasterController {

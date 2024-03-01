@@ -30,7 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-@RestController
+//@RestController
 @RequestMapping
 @Slf4j
 @Api(tags="Class Controller", description="Class CRUD Operations")

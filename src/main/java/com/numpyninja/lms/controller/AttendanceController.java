@@ -31,7 +31,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 
-@RestController
+//@RestController
 @RequestMapping("/attendance")
 @Api(tags="Attendance Controller", description="Attendance CRUD Operations")
 public class AttendanceController{

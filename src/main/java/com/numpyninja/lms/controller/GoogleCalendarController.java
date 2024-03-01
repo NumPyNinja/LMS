@@ -30,7 +30,7 @@ import com.numpyninja.lms.services.GoogleCalendarService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@RestController
+//@RestController
 @Api(tags = "Google Calendar Integration Controller")
 public class GoogleCalendarController {
 
