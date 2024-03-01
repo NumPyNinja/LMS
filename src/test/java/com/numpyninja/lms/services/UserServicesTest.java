@@ -484,7 +484,10 @@ class UserServicesTest {
         mockUserDto.setUserMiddleName("APJ");
         given(userMapper.user(mockUserDto)).willReturn(mockUser);
         given(userRepo.save(mockUser)).willReturn(mockUser);
-        given(userMapper.userDto(mockUser)).willReturn(mockUserDto);
+        given(userLoginRepository.findByUserUserId(mockUser.getUserId())).willReturn(Optional.of(mockUserLogin));
+        mockUserLogin.setUserLoginEmail("abdul.kalam@mail.com");
+        given(userLoginRepository.save(mockUserLogin)).willReturn(mockUserLogin);
+        given(userLoginMapper.toUserDto(mockUserLogin)).willReturn(mockUserDto);
 
         //when
         UserDto userDto = userService.updateUser(mockUserDto, mockUser.getUserId());
@@ -492,6 +495,7 @@ class UserServicesTest {
         //then
         assertThat(userDto).isNotNull();
         assertThat(userDto.getUserMiddleName()).isEqualTo("APJ");
+        assertThat(userDto.getUserLoginEmail()).isEqualTo("abdul.kalam@gmail.com");
 
     }
 
