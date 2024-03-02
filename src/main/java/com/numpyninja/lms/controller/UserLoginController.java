@@ -60,7 +60,7 @@ public class UserLoginController {
         return ResponseEntity.ok("Logout successful");
     }
 
-    @GetMapping("/login/AccountActivation")
+  //  @GetMapping("/login/AccountActivation")
     public ResponseEntity<ApiResponse> validateAccountActToken(
             @RequestHeader(value = "Authorization") String token) {
         String validity = this.userLoginService.validateTokenAtAccountActivation(token);
@@ -73,7 +73,7 @@ public class UserLoginController {
             return new ResponseEntity<ApiResponse>(new ApiResponse(validity, true), HttpStatus.OK); // validity has email id in this case
     }
 
-    @PostMapping("/resetPassowrd")
+   // @PostMapping("/resetPassowrd")
     public ResponseEntity<ApiResponse> resetPassword(@Valid @RequestBody LoginDto logindto,
                                                      @RequestHeader(value = "Authorization") String token) {
         String status = this.userLoginService.resetPassword(logindto, token);
@@ -84,7 +84,7 @@ public class UserLoginController {
         return null;
     }
     
-    @PostMapping("/login/forgotpassword/confirmEmail")
+   // @PostMapping("/login/forgotpassword/confirmEmail")
 	@ApiOperation("ForgotPassword Confirm Email")
 	public ResponseEntity<JwtResponseDto> forgotPasswordConfirmEmail(@Valid @RequestBody EmailDto userLoginEmail) throws InvalidDataException {
     	JwtResponseDto forgotPassResDto = userLoginService.forgotPasswordConfirmEmail(userLoginEmail);
@@ -99,7 +99,7 @@ public class UserLoginController {
 		}
 	}
     
-    @GetMapping("/validateToken")
+   // @GetMapping("/validateToken")
     public ResponseEntity<ApiResponse> validateToken(@RequestHeader(value = "Authorization") String token) {
         boolean status = this.userLoginService.validateToken(token);
 
