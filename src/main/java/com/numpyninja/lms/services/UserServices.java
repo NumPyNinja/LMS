@@ -181,13 +181,13 @@ public class UserServices implements UserDetailsService {
     }
 
     public UserAllDto getUserInfoById(String userId) {
-        User existingUser = userRepository.findById(userId)
+        UserLogin existingLoginUser = userLoginRepository.findByUserUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
 
         List<UserRoleMap> userRoleMaps = userRoleMapRepository.findUserRoleMapsByUserUserId(userId);
 
         UserAllDto userAllDto = UserAllDto.builder()
-                .userDto(userMapper.userDto(existingUser))
+                .userDto(userLoginMapper.toUserDto(existingLoginUser))
                 .userRoleMaps(userMapper.toUserRoleMapSlimDtos(userRoleMaps))
                 .build();
 
@@ -434,7 +434,16 @@ public class UserServices implements UserDetailsService {
             }
 
             User updatedUser = userRepository.save(toBeupdatedUser);
-            UserDto updatedUserDto = userMapper.userDto(updatedUser);
+
+            //Bug - returning null value for userLoginEmail in userDto repsonse
+            //Bugfix - returning the updated value of userLoginEmail on updating the userLoginEmail field
+            Optional<UserLogin> userLogin = userLoginRepository.findByUserUserId(userId);
+            userLogin.get().setUserId(updatedUser.getUserId());
+            userLogin.get().setUser(updatedUser);
+            userLogin.get().setUserLoginEmail(updateuserDto.getUserLoginEmail());
+            userLogin.get().setLastModTime(new Timestamp(utilDate.getTime()));
+            UserLogin toBeupdatedUserLogin = userLoginRepository.save(userLogin.get());
+            UserDto updatedUserDto = userLoginMapper.toUserDto(toBeupdatedUserLogin);
             return updatedUserDto;
         }
     }
@@ -551,11 +560,13 @@ public class UserServices implements UserDetailsService {
                 toUpdatedRole.setRole(userRole); //Role Id R01/R02/R03
                 toUpdatedRole.setUser(existingUser); //user Id U01/U02
 
-                toUpdatedRole = userRoleMapRepository.save(toUpdatedRole);
-            }
-        } else
-            throw new ResourceNotFoundException(
-                    "Invalid Role Id for " + "UserID: " + userId);
+                        				  
+                toUpdatedRole = userRoleMapRepository.save(toUpdatedRole);                              
+             }
+          }
+          else 
+              throw new ResourceNotFoundException(
+                      "Invalid Role Id for " + "UserID: " + userId);
         return userId;
     }
 
@@ -885,12 +896,12 @@ public class UserServices implements UserDetailsService {
     public List<UserDto> getUsersByRoleID(String roleId) {
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new ResourceNotFoundException("RoleID " + roleId + " not found"));
-        List<UserRoleProgramBatchMap> userRoleProgramBatchMapList = userRoleProgramBatchMapRepository.findByRole_RoleId(roleId);
-        if (userRoleProgramBatchMapList.isEmpty()) {
+        List<UserRoleMap> userRoleMapList = userRoleMapRepository.findByRole_RoleId(roleId);
+        if (userRoleMapList.isEmpty()) {
             throw new ResourceNotFoundException("No Users found for the given role ID: " + roleId);
         }
-        List<UserDto> userdto = userRoleProgramBatchMapList.stream()
-                .map(UserRoleProgramBatchMap::getUser)
+        List<UserDto> userdto=  userRoleMapList.stream()
+                .map(UserRoleMap::getUser)
                 .map(user -> userMapper.userDtos(Arrays.asList(user)).get(0))
                 .collect(Collectors.toList());
         return userdto;

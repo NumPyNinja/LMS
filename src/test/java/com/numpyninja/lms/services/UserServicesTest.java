@@ -78,7 +78,9 @@ class UserServicesTest {
 
     private User mockUser, mockUser2, mockUser3;
 
-    private UserDto mockUserDto, mockUserDto2, mockUserDto3;
+    private UserLogin mockUserLogin;
+
+    private UserDto mockUserDto, mockUserDto2, mockUserDto3, mockUserDto4;
 
     private UserRoleMap mockUserRoleMap, mockUserRoleMap2;
 
@@ -128,6 +130,9 @@ class UserServicesTest {
 
         mockUserDto = new UserDto("U02", "Abdul", "Kalam", " ", 2222222222L, "India", "IST", "www.linkedin.com/Kalam1234",
                 "MCA", "MBA", "Indian scientist", "H4", "abdul.kalam@gmail.com");
+
+        mockUserLogin = new UserLogin("U02","abdul.kalam@gmail.com","Abdul123","Active",Timestamp.valueOf(LocalDateTime.now()),
+                Timestamp.valueOf(LocalDateTime.now()),mockUser);
 
         String userRoleStatus = "Active";
         Timestamp Timestamp = new Timestamp(utilDate.getTime());
@@ -353,15 +358,16 @@ class UserServicesTest {
         //given
         given(userRepo.existsById(mockUser.getUserId())).willReturn(true);
         given(userLoginRepository.findById(mockUser.getUserId())).willReturn(Optional.of(mockUserLogin));
-        willDoNothing().given(userRepo).deleteById(mockUser.getUserId());
+        mockUserLogin.setLoginStatus("Inactive");
+        given(userLoginRepository.save(mockUserLogin)).willReturn(mockUserLogin);
 
         //when
         userService.deleteUser(mockUser.getUserId());
 
         //then
-        verify(userRepo, times(1)).deleteById(mockUser.getUserId());
         verify(userRepo).existsById(mockUser.getUserId());
-        verify(userRepo).deleteById(mockUser.getUserId());
+        verify(userLoginRepository).save(mockUserLogin);
+        assertEquals("Inactive",mockUserLogin.getLoginStatus());
 
     }
 
@@ -371,7 +377,7 @@ class UserServicesTest {
         String userId = "U99";
         String message = String.format("User not found with Id : %s ", userId);
 
-        when(userRepo.findById(userId)).thenReturn(Optional.empty());
+        when(userLoginRepository.findByUserUserId(userId)).thenReturn(Optional.empty());
 
         Exception ex = assertThrows(ResourceNotFoundException.class,
                 () -> userService.getUserInfoById(userId));
@@ -406,9 +412,9 @@ class UserServicesTest {
         List<UserPictureSlimDto> mockUserPictureSlimDtos = List.of(new UserPictureSlimDto(1L, "ProfilePic",
                 "C:\\Images"));
 
-        when(userRepo.findById(userId)).thenReturn(Optional.of(mockUser2));
+        when(userLoginRepository.findByUserUserId(userId)).thenReturn(Optional.of(mockUserLogin));
         when(userRoleMapRepository.findUserRoleMapsByUserUserId(userId)).thenReturn(mockUserRoleMaps);
-        when(userMapper.userDto(mockUser2)).thenReturn(mockUserDto2);
+        when(userLoginMapper.toUserDto(mockUserLogin)).thenReturn(mockUserDto);
         when(userMapper.toUserRoleMapSlimDtos(mockUserRoleMaps)).thenReturn(mockUserRoleMapSlimDtos);
         when(userRoleProgramBatchMapRepository.findByUser_UserId(userId)).thenReturn(mockUserRoleProgramBatchMaps);
         when(batchMapper.toBatchSlimDtoList(anyList())).thenReturn(mockBatchslimDtos);
@@ -423,6 +429,7 @@ class UserServicesTest {
         assertEquals(2L, responseUserAllDto.getUserProgramBatchSlimDtos().get(0).getProgramId());
         assertEquals("Java", responseUserAllDto.getUserSkillSlimDtos().get(0).getSkillName());
         assertEquals("ProfilePic", responseUserAllDto.getUserPictureSlimDtos().get(0).getUserFileType());
+        assertEquals("abdul.kalam@gmail.com",responseUserAllDto.getUserDto().getUserLoginEmail());
     }
 
     @DisplayName("test for getting User Info for a given userId with role Staff")
@@ -450,9 +457,9 @@ class UserServicesTest {
         List<UserPictureSlimDto> mockUserPictureSlimDtos = List.of(new UserPictureSlimDto(2L, "Resume",
                 "C:\\Documents"));
 
-        when(userRepo.findById(userId)).thenReturn(Optional.of(mockUser2));
+        when(userLoginRepository.findByUserUserId(userId)).thenReturn(Optional.of(mockUserLogin));
         when(userRoleMapRepository.findUserRoleMapsByUserUserId(userId)).thenReturn(mockUserRoleMaps);
-        when(userMapper.userDto(mockUser2)).thenReturn(mockUserDto2);
+        when(userLoginMapper.toUserDto(mockUserLogin)).thenReturn(mockUserDto);
         when(userMapper.toUserRoleMapSlimDtos(mockUserRoleMaps)).thenReturn(mockUserRoleMapSlimDtos);
         when(userRoleProgramBatchMapRepository.findByUser_UserId(userId)).thenReturn(mockUserRoleProgramBatchMaps);
         when(batchMapper.toBatchSlimDtoList(anyList())).thenReturn(mockBatchslimDtos);
@@ -465,6 +472,7 @@ class UserServicesTest {
         assertThat(responseUserAllDto).isNotNull();
         assertEquals(2L, responseUserAllDto.getUserProgramBatchSlimDtos().get(0).getProgramId());
         assertEquals("Resume", responseUserAllDto.getUserPictureSlimDtos().get(0).getUserFileType());
+        assertEquals("abdul.kalam@gmail.com",responseUserAllDto.getUserDto().getUserLoginEmail());
 
     }
 
@@ -476,7 +484,10 @@ class UserServicesTest {
         mockUserDto.setUserMiddleName("APJ");
         given(userMapper.user(mockUserDto)).willReturn(mockUser);
         given(userRepo.save(mockUser)).willReturn(mockUser);
-        given(userMapper.userDto(mockUser)).willReturn(mockUserDto);
+        given(userLoginRepository.findByUserUserId(mockUser.getUserId())).willReturn(Optional.of(mockUserLogin));
+        mockUserLogin.setUserLoginEmail("abdul.kalam@mail.com");
+        given(userLoginRepository.save(mockUserLogin)).willReturn(mockUserLogin);
+        given(userLoginMapper.toUserDto(mockUserLogin)).willReturn(mockUserDto);
 
         //when
         UserDto userDto = userService.updateUser(mockUserDto, mockUser.getUserId());
@@ -484,6 +495,7 @@ class UserServicesTest {
         //then
         assertThat(userDto).isNotNull();
         assertThat(userDto.getUserMiddleName()).isEqualTo("APJ");
+        assertThat(userDto.getUserLoginEmail()).isEqualTo("abdul.kalam@gmail.com");
 
     }
 

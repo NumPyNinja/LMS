@@ -57,7 +57,7 @@ public class AssignmentSubmitRepositoryTest {
 		ClassDto class1 = new ClassDto(1L, 1, 1, timestamp, "Selenium1",
                 "Active","UO2", "Selenium1 Class", "OK",
                 "c:/ClassNotes",
-                "c:/RecordingPath");
+                "c:/RecordingPath","SDET01");
 
 		User user = new User("U01", "Steve", "Jobs", "",
 				1234567890L, "CA", "PST", "@stevejobs", "",

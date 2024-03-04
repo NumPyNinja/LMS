@@ -27,6 +27,7 @@ private String classDescription;
 private String classComments;
 private String classNotes;
 private String classRecordingPath;
+private String batchName;
 //private String createdby;
 
 //private Timestamp creationTime;

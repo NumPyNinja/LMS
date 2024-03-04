@@ -105,7 +105,7 @@ class ClassServiceTest {
         mockClassDto = new ClassDto((long) 1, 3, 1, classDate,
                 "Selenium", "Active","U02", "Selenium Class" ,"OK",
                 "c:/ClassNotes",
-                "c:/RecordingPath");
+                "c:/RecordingPath","SDET01");
 
         mockClass2 = new Class((long) 2, batchInClass, 2, classDate,
                 "Selenium1", "Active",staffInClass, "Selenium Class1", "OK",
@@ -115,7 +115,7 @@ class ClassServiceTest {
         mockClassDto2= new ClassDto((long) 2, 3, 2, classDate,
                 "Selenium1","Active", "U02", "Selenium Class1", "OK",
                 "c:/ClassNotes",
-                "c:/RecordingPath");
+                "c:/RecordingPath","SDET01");
         
        User user = new User("U02", "Steve", "Jobs", "Martin",
 				1234567890L, "CA", "PST", "@stevejobs", "",
