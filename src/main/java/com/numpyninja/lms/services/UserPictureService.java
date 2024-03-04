@@ -1,44 +1,9 @@
 package com.numpyninja.lms.services;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.security.auth.x500.X500Principal;
-import javax.servlet.http.HttpServletRequest;
-
-import org.aspectj.bridge.context.PinpointingMessageHandler;
-//import org.eclipse.jdt.internal.compiler.classfmt.NonNullDefaultAwareTypeAnnotationWalker;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.fasterxml.jackson.annotation.ObjectIdGenerators.StringIdGenerator;
-import com.numpyninja.lms.dto.AssignmentDto;
-import com.numpyninja.lms.dto.AttendanceDto;
 import com.numpyninja.lms.dto.UserPictureEntityDTO;
-//import com.numpyninja.lms.dto.UserPictureEntityDto;
-import com.numpyninja.lms.entity.Assignment;
-import com.numpyninja.lms.entity.Attendance;
 import com.numpyninja.lms.entity.User;
 import com.numpyninja.lms.entity.UserPictureEntity;
 import com.numpyninja.lms.exception.DuplicateResourceFoundException;

@@ -1,8 +1,6 @@
 package com.numpyninja.lms.controller;
 
 import java.util.List;
-
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -25,8 +26,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import java.util.Collections;
 
-@EnableSwagger2
+//@EnableSwagger2
 @Configuration
+@EnableWebMvc
 public class SwaggerConfiguration {
 	public static final String AUTHORIZATION_HEADER = "Authorization";
 
@@ -49,7 +51,7 @@ public class SwaggerConfiguration {
 
 	@Bean
 	public Docket api() {
-		return new Docket(DocumentationType.SWAGGER_2)
+		return new Docket(DocumentationType.OAS_30)
 				//.apiInfo(apiInfo())
 				//.securityContexts(Arrays.asList(securityContext()))
 				//.securitySchemes(Arrays.asList(apiKeys()))
@@ -66,7 +68,7 @@ public class SwaggerConfiguration {
 	            .genericModelSubstitutes(ResponseEntity.class);
 	}
 
-	
+
 	 private ApiInfo apiInfo(){
 	        return new ApiInfo(
 	                "Learning Management System Phase 2",
@@ -84,9 +86,6 @@ public class SwaggerConfiguration {
 		registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
 		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
 	}
-	
-	
 
-	 
-	
+
 }

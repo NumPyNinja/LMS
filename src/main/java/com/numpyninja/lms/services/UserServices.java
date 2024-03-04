@@ -11,6 +11,7 @@ import com.numpyninja.lms.repository.*;
 import com.numpyninja.lms.security.UserDetailsImpl;
 import com.numpyninja.lms.security.jwt.JwtUtils;
 import com.numpyninja.lms.util.EmailSender;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserCache;
@@ -32,61 +33,28 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserServices implements UserDetailsService {
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    UserLoginRepository userLoginRepository;
-
-    @Autowired
-    UserRoleMapRepository userRoleMapRepository;
-
-    @Autowired
-    RoleRepository roleRepository;
-
-    @Autowired
-    UserMapper userMapper;
-
-    @Autowired
-    ProgramRepository programRepository;
-
-    @Autowired
-    ProgBatchRepository progBatchRepository;
-
-    @Autowired
-    UserRoleProgramBatchMapRepository userRoleProgramBatchMapRepository;
-
-    @Autowired
-    ProgramMapper programMapper;
-
-    @Autowired
-    BatchMapper batchMapper;
-
-    @Autowired
-    UserSkillRepository userSkillRepository;
-
-    @Autowired
-    UserSkillMapper userSkillMapper;
-
-    @Autowired
-    UserPictureRepository userPictureRepository;
-
-    @Autowired
-    UserPictureMapper userPictureMapper;
-
-    @Autowired
-    UserLoginMapper userLoginMapper;
-
-    @Autowired
-    JwtUtils jwtUtils;
-
-    @Autowired
-    private EmailSender emailSender;
-
-    @Autowired
-    private UserCache userCache;
+    private final UserLoginRepository userLoginRepository;
+    private final UserRoleMapRepository userRoleMapRepository;
+    private final RoleRepository roleRepository;
+    private final UserMapper userMapper;
+    private final ProgramRepository programRepository;
+    private final ProgBatchRepository progBatchRepository;
+    private final UserRoleProgramBatchMapRepository userRoleProgramBatchMapRepository;
+    private final ProgramMapper programMapper;
+    private final BatchMapper batchMapper;
+    private final UserSkillRepository userSkillRepository;
+    private final UserSkillMapper userSkillMapper;
+    private final UserPictureRepository userPictureRepository;
+    private final UserPictureMapper userPictureMapper;
+    private final UserLoginMapper userLoginMapper;
+    private final JwtUtils jwtUtils;
+    private final EmailSender emailSender;
+    private final UserCache userCache;
 
     @Value("${app.frontend.url}")
     private String frontendUrl;
@@ -111,32 +79,32 @@ public class UserServices implements UserDetailsService {
         Map<String, Integer> postGraduationMap = new HashMap<>();
         Map<String, Integer> visaStatusMap = new HashMap<>();
 
-        for(UserDto userDto : userDtos) {
+        for (UserDto userDto : userDtos) {
             String userLocation = userDto.getUserLocation();
             String userTimeZone = userDto.getUserTimeZone();
             String userUnderGraduation = userDto.getUserEduUg();
             String userPostGraduation = userDto.getUserEduPg();
             String userVisaStatus = userDto.getUserVisaStatus();
 
-            if(userLocation != null){
+            if (userLocation != null) {
                 locationMap.put(userLocation.toLowerCase(),
-                        locationMap.getOrDefault(userLocation.toLowerCase(),0)+1);
+                        locationMap.getOrDefault(userLocation.toLowerCase(), 0) + 1);
             }
-            if(userTimeZone != null){
+            if (userTimeZone != null) {
                 timeZoneMap.put(userTimeZone.toLowerCase(),
-                        timeZoneMap.getOrDefault(userTimeZone.toLowerCase(),0)+1);
+                        timeZoneMap.getOrDefault(userTimeZone.toLowerCase(), 0) + 1);
             }
-            if(userUnderGraduation != null){
+            if (userUnderGraduation != null) {
                 underGraduationMap.put(userUnderGraduation.toLowerCase(),
-                        underGraduationMap.getOrDefault(userUnderGraduation.toLowerCase(),0)+1);
+                        underGraduationMap.getOrDefault(userUnderGraduation.toLowerCase(), 0) + 1);
             }
-            if(userPostGraduation != null){
+            if (userPostGraduation != null) {
                 postGraduationMap.put(userPostGraduation.toLowerCase(),
-                        postGraduationMap.getOrDefault(userPostGraduation.toLowerCase(),0)+1);
+                        postGraduationMap.getOrDefault(userPostGraduation.toLowerCase(), 0) + 1);
             }
-            if(userVisaStatus != null){
+            if (userVisaStatus != null) {
                 visaStatusMap.put(userVisaStatus.toLowerCase(),
-                        visaStatusMap.getOrDefault(userVisaStatus.toLowerCase(),0)+1);
+                        visaStatusMap.getOrDefault(userVisaStatus.toLowerCase(), 0) + 1);
             }
 
         }
@@ -144,31 +112,31 @@ public class UserServices implements UserDetailsService {
         FacetDto facetDTO = new FacetDto();
         List<FacetFieldDto> facetFieldDtoList = new ArrayList<>();
 
-        if(!locationMap.isEmpty()){
+        if (!locationMap.isEmpty()) {
             FacetFieldDto locationFacetFieldDto = new FacetFieldDto();
             locationFacetFieldDto.setDisplayName(FacetFieldEnums.LOCATION.name());
             locationFacetFieldDto.setFilterValues(fetchMapEntries(locationMap));
             facetFieldDtoList.add(locationFacetFieldDto);
         }
-        if(!timeZoneMap.isEmpty()){
+        if (!timeZoneMap.isEmpty()) {
             FacetFieldDto timeZoneFacetFieldDTO = new FacetFieldDto();
             timeZoneFacetFieldDTO.setDisplayName(FacetFieldEnums.TIME_ZONE.name());
             timeZoneFacetFieldDTO.setFilterValues(fetchMapEntries(timeZoneMap));
             facetFieldDtoList.add(timeZoneFacetFieldDTO);
         }
-        if(!underGraduationMap.isEmpty()){
+        if (!underGraduationMap.isEmpty()) {
             FacetFieldDto underGraduationFacetFieldDto = new FacetFieldDto();
             underGraduationFacetFieldDto.setDisplayName(FacetFieldEnums.UNDER_GRADUATION.name());
             underGraduationFacetFieldDto.setFilterValues(fetchMapEntries(underGraduationMap));
             facetFieldDtoList.add(underGraduationFacetFieldDto);
         }
-        if(!postGraduationMap.isEmpty()){
+        if (!postGraduationMap.isEmpty()) {
             FacetFieldDto postGraduationFacetFieldDto = new FacetFieldDto();
             postGraduationFacetFieldDto.setDisplayName(FacetFieldEnums.POST_GRADUATION.name());
             postGraduationFacetFieldDto.setFilterValues(fetchMapEntries(postGraduationMap));
             facetFieldDtoList.add(postGraduationFacetFieldDto);
         }
-        if(!visaStatusMap.isEmpty()){
+        if (!visaStatusMap.isEmpty()) {
             FacetFieldDto visaStatusFacetFieldDto = new FacetFieldDto();
             visaStatusFacetFieldDto.setDisplayName(FacetFieldEnums.VISA_STATUS.name());
             visaStatusFacetFieldDto.setFilterValues(fetchMapEntries(visaStatusMap));
@@ -182,7 +150,7 @@ public class UserServices implements UserDetailsService {
 
     private List<FilterValueDto> fetchMapEntries(Map<String, Integer> map) {
         List<FilterValueDto> filterValueDtoList = new ArrayList<>();
-        for(Map.Entry<String, Integer> entrySet: map.entrySet()){
+        for (Map.Entry<String, Integer> entrySet : map.entrySet()) {
             FilterValueDto filterValueDto = new FilterValueDto();
             filterValueDto.setCount(entrySet.getValue());
             filterValueDto.setName(entrySet.getKey());
@@ -273,10 +241,10 @@ public class UserServices implements UserDetailsService {
                 }
             }
             /*Check Role is valid*/
-            if(!isValidRole(newUserLoginRoleDto.getUserRoleMaps())) {
-            	throw new InvalidDataException("Failed to create user, as 'roleId' is invalid !! ");
+            if (!isValidRole(newUserLoginRoleDto.getUserRoleMaps())) {
+                throw new InvalidDataException("Failed to create user, as 'roleId' is invalid !! ");
             }
-            
+
             //Check if the Phone no is Long and does not accept String and accept in specified format(Example :+91 1234567890)
             String allCountryRegex = "^(\\+\\d{1,3}( )?)?((\\(\\d{1,3}\\))|\\d{1,3})[- .]?\\d{3,4}[- .]?\\d{4}$";
             if (Pattern.compile(allCountryRegex).matcher(newUserLoginRoleDto.getUserPhoneNumber().toString()).matches()) {
@@ -314,7 +282,7 @@ public class UserServices implements UserDetailsService {
 
                     roleId = newUserLoginRoleDto.getUserRoleMaps().get(i).getRoleId();
 
-                    Role roleUser = roleRepository.getById(roleId);
+                    Role roleUser = roleRepository.getReferenceById(roleId);
 
                     roleStatus = newUserLoginRoleDto.getUserRoleMaps().get(i).getUserRoleStatus();
 
@@ -394,21 +362,21 @@ public class UserServices implements UserDetailsService {
     }
 
     private boolean isValidRole(List<UserRoleMapSlimDTO> userRoleMaps) {
-    	//Get all existing roles and check if the role passed matches to one of them
-    	List<Role> availableRoles = roleRepository.findAll();
-    	//Get  unique RoleIds present in DB
-    	Set<String> availableRoleIds = availableRoles.stream().map(avRole->avRole.getRoleId()).collect(Collectors.toSet());  
-    	//Get the input roleIds which are not in DB as invalidRole list 
-    	Set<UserRoleMapSlimDTO> invalidRole = userRoleMaps.stream().filter(urm-> !availableRoleIds.contains(urm.getRoleId())).collect(Collectors.toSet());
-    	//If no invalid Roles are  present then return true, else return false
-    	if(invalidRole.isEmpty()) {
-    		return true;
-    	}
-		return false;
-	}
+        //Get all existing roles and check if the role passed matches to one of them
+        List<Role> availableRoles = roleRepository.findAll();
+        //Get  unique RoleIds present in DB
+        Set<String> availableRoleIds = availableRoles.stream().map(avRole -> avRole.getRoleId()).collect(Collectors.toSet());
+        //Get the input roleIds which are not in DB as invalidRole list
+        Set<UserRoleMapSlimDTO> invalidRole = userRoleMaps.stream().filter(urm -> !availableRoleIds.contains(urm.getRoleId())).collect(Collectors.toSet());
+        //If no invalid Roles are  present then return true, else return false
+        if (invalidRole.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
 
 
-	public UserDto updateUser(UserDto updateuserDto, String userId)
+    public UserDto updateUser(UserDto updateuserDto, String userId)
             throws ResourceNotFoundException, InvalidDataException {
         User toBeupdatedUser = null;
         Date utilDate = new Date();
@@ -473,34 +441,34 @@ public class UserServices implements UserDetailsService {
 
     public String updateUserRoleStatus(UserRoleMapSlimDTO updateUserRoleStatus, String userId)
             throws InvalidDataException {
-    	
+
         if (userId == null) {
             throw new InvalidDataException("UserId cannot be blank/null");
         } else {
             Optional<User> userById = userRepository.findById(userId);
-            
+
             if (userById.isEmpty()) {
                 throw new ResourceNotFoundException("UserID: " + userId + " Not Found");
             } else {
 
                 List<UserRoleMap> existingUserRoles = userRoleMapRepository.findUserRoleMapsByUserUserId(userId);
-                
+
                 String roleIdToUpdate = updateUserRoleStatus.getRoleId();
                 String roleStatusToUpdate = updateUserRoleStatus.getUserRoleStatus();
-                
+
                 List<String> roleIdList;
                 boolean roleFound = false;
                 for (int roleCount = 0; roleCount < existingUserRoles.size(); roleCount++) {
 
                     String existingRoleId = existingUserRoles.get(roleCount).getRole().getRoleId();
-                    
+
                     if (roleIdToUpdate.equals(existingRoleId)) {
                         roleFound = true;
 
                         Long userRoleId = existingUserRoles.get(roleCount).getUserRoleId();
-                        
+
                         userRoleMapRepository.updateUserRole(userRoleId, roleStatusToUpdate);
-                                    
+
                     }
                 }
                 if (!roleFound) {
@@ -511,87 +479,86 @@ public class UserServices implements UserDetailsService {
             return userId;
         }
     }
-  
+
     private boolean validateInputRoles(List<String> userRoles) {
-    	
-    	boolean validated = false;
-    	if(userRoles.size() > 2 || userRoles.size() < 1)
-    		throw new InvalidDataException("Input roles cannot be 0 or greater than 2");
-    	List<Role> availableRoles = roleRepository.findAll();
-        Set<String> availableRoleIds = availableRoles.stream().map(avRole->avRole.getRoleId()).collect(Collectors.toSet());//R01/R02/R03
-        
-        if(userRoles.size() > 1 ) {
-        	String roleId1 = userRoles.get(0);
-        	String roleId2 = userRoles.get(1);  
-        	
-        	if(userRoles.get(0).equals(userRoles.get(1)))
-        		throw new InvalidDataException("Please enter a valid Role Id. Role id's cannot be same. ");
-        	
-        	if (!(availableRoleIds.contains(roleId1)) ||  !(availableRoleIds.contains(roleId2))) {
-        		throw new InvalidDataException("Invalid Role Ids.");
-        	}
+
+        boolean validated = false;
+        if (userRoles.size() > 2 || userRoles.size() < 1)
+            throw new InvalidDataException("Input roles cannot be 0 or greater than 2");
+        List<Role> availableRoles = roleRepository.findAll();
+        Set<String> availableRoleIds = availableRoles.stream().map(avRole -> avRole.getRoleId()).collect(Collectors.toSet());//R01/R02/R03
+
+        if (userRoles.size() > 1) {
+            String roleId1 = userRoles.get(0);
+            String roleId2 = userRoles.get(1);
+
+            if (userRoles.get(0).equals(userRoles.get(1)))
+                throw new InvalidDataException("Please enter a valid Role Id. Role id's cannot be same. ");
+
+            if (!(availableRoleIds.contains(roleId1)) || !(availableRoleIds.contains(roleId2))) {
+                throw new InvalidDataException("Invalid Role Ids.");
+            }
         }
-        
-        if(userRoles.size() > 0 ) {
-        	String roleId1 = userRoles.get(0);
-        	if (!(availableRoleIds.contains(roleId1))) {
-        		throw new InvalidDataException ("Invalid role id");
-        		
-        	}
+
+        if (userRoles.size() > 0) {
+            String roleId1 = userRoles.get(0);
+            if (!(availableRoleIds.contains(roleId1))) {
+                throw new InvalidDataException("Invalid role id");
+
+            }
         }
         validated = true;
         return validated;
-        
+
     }
-    
+
     public String updateRoleId(UserRoleIdDTO updateRoleId, String userId)
             throws InvalidDataException {
-    	
-    	UserRoleMap toUpdatedRole =null;
+
+        UserRoleMap toUpdatedRole = null;
         Optional<User> userById = userRepository.findById(userId);
         if (userById.isEmpty()) {
-                throw new ResourceNotFoundException("UserID: " + userId + " Not Found");
-        } 
+            throw new ResourceNotFoundException("UserID: " + userId + " Not Found");
+        }
         List<UserRoleMap> existingUserRoles = userRoleMapRepository.findUserRoleMapsByUserUserId(userId);
         Long userRoleId = existingUserRoles.get(0).getUserRoleId();
         Set<String> existingRoleIds = existingUserRoles.stream().map(role -> role.getRole().getRoleId()).collect(Collectors.toSet());
         String roleIdToUpdate1 = updateRoleId.getUserRoleList().get(0);
-       
-        if(existingRoleIds.contains(roleIdToUpdate1)) {
-              	System.out.println("Role Id already exists");
-              		throw new InvalidDataException("Role "+roleIdToUpdate1+ "already exists for user " +userId);
+
+        if (existingRoleIds.contains(roleIdToUpdate1)) {
+            System.out.println("Role Id already exists");
+            throw new InvalidDataException("Role " + roleIdToUpdate1 + "already exists for user " + userId);
         }
-        if( updateRoleId.getUserRoleList().size() > 1) {
-        	String roleIdToUpdate2 = updateRoleId.getUserRoleList().get(1);
-            if(existingRoleIds.contains(roleIdToUpdate2)) {
-                  		throw new InvalidDataException("Role "+roleIdToUpdate2+ " already exists for user " +userId);
+        if (updateRoleId.getUserRoleList().size() > 1) {
+            String roleIdToUpdate2 = updateRoleId.getUserRoleList().get(1);
+            if (existingRoleIds.contains(roleIdToUpdate2)) {
+                throw new InvalidDataException("Role " + roleIdToUpdate2 + " already exists for user " + userId);
             }
         }
-        if(validateInputRoles(updateRoleId.getUserRoleList())) {
-             userRoleMapRepository.updateRoleId(userRoleId, roleIdToUpdate1);//Update the role
-             if( updateRoleId.getUserRoleList().size() > 1) {
+        if (validateInputRoles(updateRoleId.getUserRoleList())) {
+            userRoleMapRepository.updateRoleId(userRoleId, roleIdToUpdate1);//Update the role
+            if (updateRoleId.getUserRoleList().size() > 1) {
                 toUpdatedRole = userMapper.userRole(updateRoleId);
                 User existingUser = userRepository.findById(userId)
-                                    .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
-                        			  
+                        .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
+
                 String roleIdToUpdate2 = updateRoleId.getUserRoleList().get(1);
-                Role userRole = roleRepository.getById(roleIdToUpdate2);
-                    
+                Role userRole = roleRepository.getReferenceById(roleIdToUpdate2);
+
                 toUpdatedRole.setCreationTime(Timestamp.valueOf(LocalDateTime.now()));
                 toUpdatedRole.setLastModTime(Timestamp.valueOf(LocalDateTime.now()));
                 toUpdatedRole.setUserRoleStatus("Active");
                 toUpdatedRole.setRole(userRole); //Role Id R01/R02/R03
                 toUpdatedRole.setUser(existingUser); //user Id U01/U02
-                        				  
+
                 toUpdatedRole = userRoleMapRepository.save(toUpdatedRole);
-             }
-          }
-          else 
-              throw new ResourceNotFoundException(
-                      "Invalid Role Id for " + "UserID: " + userId);
+            }
+        } else
+            throw new ResourceNotFoundException(
+                    "Invalid Role Id for " + "UserID: " + userId);
         return userId;
     }
-      
+
     /**
      * Service method for Delete User
      **/
@@ -614,25 +581,26 @@ public class UserServices implements UserDetailsService {
 
         boolean userExists = userRepository.existsById(userId);
         boolean noBatchProgramForUser = userRoleProgramBatchMapRepository.findByUser_UserId(userId).isEmpty();
-        if (!userExists){
+        if (!userExists) {
             throw new ResourceNotFoundException("UserID: " + userId + " does not exist ");
-        } else if(!noBatchProgramForUser) {
+        } else if (!noBatchProgramForUser) {
 //            throw new ResourceNotFoundException("UserID: " + userId + " Cannot be deleted as the User is assigned to a Batch/Program ");
-           List<UserRoleProgramBatchMap> userRoleProgramBatchMapList= userRoleProgramBatchMapRepository.findByUser_UserId(userId);
-            if(Objects.equals(userRoleProgramBatchMapList.get(0).getRole().getRoleId(), "R03")){
+            List<UserRoleProgramBatchMap> userRoleProgramBatchMapList = userRoleProgramBatchMapRepository.findByUser_UserId(userId);
+            if (Objects.equals(userRoleProgramBatchMapList.get(0).getRole().getRoleId(), "R03")) {
                 userRoleProgramBatchMapRepository.deleteById(userRoleProgramBatchMapRepository.findByUser_UserId(userId).get(0).getUserRoleProgramBatchId());
-                UserLogin userLogin1=userLoginRepository.findById(userId).get();
+                UserLogin userLogin1 = userLoginRepository.findById(userId).get();
                 userLogin1.setLoginStatus("Inactive");
                 userLoginRepository.save(userLogin1);
             }
         } else {
 
-            UserLogin userLogin1=userLoginRepository.findById(userId).get();
+            UserLogin userLogin1 = userLoginRepository.findById(userId).get();
             userLogin1.setLoginStatus("Inactive");
             userLoginRepository.save(userLogin1);
         }
         return userId;
     }
+
     private void removeUserFromUserCache(String emailId) {
         userCache.removeUserFromCache(emailId);
     }
@@ -693,8 +661,7 @@ public class UserServices implements UserDetailsService {
         Role existingUserRole = roleRepository.findById(roleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Role", "Id", roleId));
 
-        if(existingUserRole.getRoleId().equalsIgnoreCase("R01"))
-        {
+        if (existingUserRole.getRoleId().equalsIgnoreCase("R01")) {
             throw new InvalidDataException("User with Role Admin cannot be assigned to a Program/Batch");
         }
 
@@ -909,19 +876,20 @@ public class UserServices implements UserDetailsService {
             return "UserLogin updated successfully";
         }
     }
+
     public List<UserRoleMap> getAllUsersWithRoles() {
         return userRoleMapRepository.findAll();
     }
 
     //get users by roleid
-    public List<UserDto> getUsersByRoleID(String roleId){
+    public List<UserDto> getUsersByRoleID(String roleId) {
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new ResourceNotFoundException("RoleID " + roleId + " not found"));
         List<UserRoleProgramBatchMap> userRoleProgramBatchMapList = userRoleProgramBatchMapRepository.findByRole_RoleId(roleId);
         if (userRoleProgramBatchMapList.isEmpty()) {
             throw new ResourceNotFoundException("No Users found for the given role ID: " + roleId);
         }
-        List<UserDto> userdto=  userRoleProgramBatchMapList.stream()
+        List<UserDto> userdto = userRoleProgramBatchMapList.stream()
                 .map(UserRoleProgramBatchMap::getUser)
                 .map(user -> userMapper.userDtos(Arrays.asList(user)).get(0))
                 .collect(Collectors.toList());
@@ -929,22 +897,22 @@ public class UserServices implements UserDetailsService {
     }
 
 
-	public List<UserCountByStatusDTO> getUsercountByStatus(String roleId) throws ResourceNotFoundException{
-		if(roleId.equalsIgnoreCase("all")) {
-			return userRoleMapRepository.getUsersCountByStatus();
-		}
-		if(roleRepository.findById(roleId).isEmpty())
-			throw new ResourceNotFoundException("RoleID " + roleId + " not found");
-		return userRoleMapRepository.getUsersCountByStatusByRole(roleId);
-		
-	}
+    public List<UserCountByStatusDTO> getUsercountByStatus(String roleId) throws ResourceNotFoundException {
+        if (roleId.equalsIgnoreCase("all")) {
+            return userRoleMapRepository.getUsersCountByStatus();
+        }
+        if (roleRepository.findById(roleId).isEmpty())
+            throw new ResourceNotFoundException("RoleID " + roleId + " not found");
+        return userRoleMapRepository.getUsersCountByStatusByRole(roleId);
+
+    }
 
     public List<Role> getAllRoles() {
         return roleRepository.findAll();
     }
 
-    public List<User> getUserWithActiveStatus( ) {
-        List<UserRoleMap> userLogin1=userRoleMapRepository.findByUserRoleStatus("Active");
+    public List<User> getUserWithActiveStatus() {
+        List<UserRoleMap> userLogin1 = userRoleMapRepository.findByUserRoleStatus("Active");
         List<String> userId = userLogin1.stream().map(UserRoleMap::getUserId).collect(Collectors.toList());
         System.out.println(userId);
         return userRepository.findByUserId(userId);
@@ -957,7 +925,7 @@ public class UserServices implements UserDetailsService {
 	 * { UserDto userDto = userMapper.userDto(userById.get()); return userDto; } }
 
 
-	
+
 	/**
 	 * Check if the code below this comment are needed or not from front end. - The
 	 * controller endpoints for these are commented out for now.

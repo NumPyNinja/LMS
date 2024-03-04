@@ -2,25 +2,20 @@ package com.numpyninja.lms.controller;
 
 import com.numpyninja.lms.config.ApiResponse;
 import com.numpyninja.lms.dto.AssignmentSubmitDTO;
-import com.numpyninja.lms.entity.AssignmentSubmit;
 import com.numpyninja.lms.services.AssignmentSubmitService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-
-import javax.annotation.security.RolesAllowed;
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/assignmentsubmission")
+//@Tag(name = "Assignment Submission Controller", description = "Assignment Submission CRUD Operations")
 @Api(tags="Assignment Submission Controller", description="Assignment Submission CRUD Operations")
 public class AssignmentSubmitController {
 

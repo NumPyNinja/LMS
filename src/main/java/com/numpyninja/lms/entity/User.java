@@ -2,15 +2,11 @@ package com.numpyninja.lms.entity;
 
 import java.sql.Timestamp;
 
-import javax.persistence.*;
-import javax.validation.constraints.Pattern;
-
+import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
-
 import com.numpyninja.lms.config.UserIDGenerator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -10,17 +10,13 @@ import org.springframework.context.annotation.Bean;
 
 @TestConfiguration    // This Configuration is only for Test
 public class TestWebSecurityConfig {
+    @MockBean
+    public AuthEntryPointJwt authEntryPointJwt;
 
     @Bean
     public WebSecurityConfig webSecurityConfig() {
-        return new WebSecurityConfig();
+        return new WebSecurityConfig(authEntryPointJwt);
     }
-
-    @Bean
-    public AuthEntryPointJwt authEntryPointJwt() {
-        return new AuthEntryPointJwt();
-    }
-
     @Bean
     public JwtUtils jwtUtils() {
         return new JwtUtils();

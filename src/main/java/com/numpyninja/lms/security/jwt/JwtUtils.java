@@ -34,16 +34,27 @@ public class JwtUtils {
     
     @Value("${security.app.jwtForgotPasswordExpMs}")
     private int jwtForgotPasswordExpMs;
-
+    /**
+     * Generates a JWT token for the provided authentication.
+     * @param authentication The authentication object containing user details.
+     * @return The generated JWT token.
+     */
     public String generateJwtToken(Authentication authentication) {
 
         UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
+        long currentTimeMillis = System.currentTimeMillis();
+        long expirationTimeMillis = currentTimeMillis + jwtExpirationMs;
+        Date expirationDate = new Date(expirationTimeMillis);
+
+        logger.info("Generating JWT token for user: {}", userPrincipal.getUsername());
+        logger.info("Current time: {}", new Date(currentTimeMillis));
+        logger.info("Expiration time: {}", expirationDate);
 
         return Jwts.builder()
                 .setSubject((userPrincipal.getUsername()))
                 //.claim( ROLES , authorities)   // uncomment if u want to include roles in token
-                .setIssuedAt(new Date())
-                .setExpiration(new Date( (new Date()).getTime() + jwtExpirationMs))
+                .setIssuedAt(new Date(currentTimeMillis))
+                .setExpiration(expirationDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }

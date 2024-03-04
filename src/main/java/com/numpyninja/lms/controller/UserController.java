@@ -1,18 +1,11 @@
 package com.numpyninja.lms.controller;
-
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
-
 import com.numpyninja.lms.config.ApiResponse;
 import com.numpyninja.lms.dto.*;
-
 import com.numpyninja.lms.entity.Role;
 import com.numpyninja.lms.entity.User;
 import com.numpyninja.lms.entity.UserRoleMap;
-import com.numpyninja.lms.entity.UserRoleProgramBatchMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

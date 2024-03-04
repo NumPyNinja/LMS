@@ -2,14 +2,12 @@ package com.numpyninja.lms.security.jwt;
 
 
 import java.io.IOException;
-
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import com.numpyninja.lms.repository.UserLoginRepository;
 import com.numpyninja.lms.services.UserServices;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,23 +16,27 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 
 public class AuthTokenFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtils jwtUtils;
-
     @Autowired
     private UserServices userServices;
-
     @Autowired
     private UserCache userCache;
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
-
+    private static final Logger customLogger = LoggerFactory.getLogger(AuthTokenFilter.class);
+    /**
+     * This method filters each incoming request and validates the JWT token.
+     * If the token is valid, it sets the user authentication in the Spring Security context.
+     * @param request the HTTP servlet request
+     * @param response the HTTP servlet response
+     * @param filterChain the filter chain
+     * @throws ServletException if a servlet-related error occurs
+     * @throws IOException if I/O-related error occurs
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -51,19 +53,24 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+                customLogger.info("User authentication set successfully for user: {}", userDetails.getUsername());
             }
         } catch (Exception e) {
-            logger.error("Cannot set user authentication: {}", e);
+            customLogger.error("Error occurred while setting user authentication: {}", e.getMessage());
         }
 
         filterChain.doFilter(request, response);
     }
-
+    /**
+     * This method parses the JWT token from the request header.
+     * @param request the HTTP servlet request
+     * @return the JWT token if present, or null otherwise
+     */
     private String parseJwt(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
 
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-            return headerAuth.substring(7, headerAuth.length());
+            return headerAuth.substring(7);
         }
 
         return null;

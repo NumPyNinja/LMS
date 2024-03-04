@@ -430,7 +430,7 @@ public class ClassService {
 
 				if(isPresentTrue)
 				{
-					updateClassSchedule = classRepository.getById(id);
+					updateClassSchedule = classRepository.getReferenceById(id);
 					updateClassSchedule.setClassRecordingPath(classRecordingDTO.getClassRecordingPath());
 					savedClassSchedule = classRepository.save(updateClassSchedule);
 					savedClassDTO = classMapper.toClassSchdDTO(savedClassSchedule);

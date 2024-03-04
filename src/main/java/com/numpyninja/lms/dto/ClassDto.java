@@ -1,10 +1,6 @@
 package com.numpyninja.lms.dto;
 
-import java.sql.Timestamp;
 import java.util.Date;
-
-import javax.persistence.Column;
-
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.AllArgsConstructor;

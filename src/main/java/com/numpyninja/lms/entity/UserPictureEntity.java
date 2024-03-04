@@ -1,25 +1,6 @@
 package com.numpyninja.lms.entity;
 
-import java.math.BigInteger;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
-
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
-
-import com.numpyninja.lms.config.UserIDGenerator;
-
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,7 +10,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -42,7 +22,7 @@ import lombok.ToString;
 public class UserPictureEntity {
 
 	@Id
-	@GeneratedValue (strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	
 	@Column(name = "user_file_id")
 	private Long userFileId;

@@ -618,7 +618,7 @@ class ClassServiceTest {
           
             Class savedClass = mockClass;
       
-            given(classRepository.getById(classId)).willReturn(mockClass);
+            given(classRepository.getReferenceById(classId)).willReturn(mockClass);
             given(classRepository.findById(classId)).willReturn(Optional.of(mockClass));
             savedClass.setClassRecordingPath(classRecordingDTO.getClassRecordingPath());
             

@@ -2,13 +2,9 @@ package com.numpyninja.lms.entity;
 
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.persistence.*;
-
+import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -32,7 +28,7 @@ public class Class {
     @ManyToOne//(fetch= FetchType.LAZY,cascade = CascadeType.ALL)
 	@JoinColumn(name="batch_id", nullable=false)//,insertable=false, updatable=false,referencedColumnName = "batch_id", unique = true)
 	//@JsonIgnore
-	@javax.persistence.Embedded
+	@jakarta.persistence.Embedded
 	@AttributeOverride( name = "batchId", column = @Column(name = "batch_id"))
 	private Batch batchInClass;
     
@@ -53,7 +49,7 @@ public class Class {
    @ManyToOne//(fetch= FetchType.LAZY,cascade = CascadeType.ALL)
 	@JoinColumn(name="class_staff_id", nullable=false)//,insertable=false, updatable=false,referencedColumnName = "program_id", unique = true)
 	//@JsonIgnore
-	@javax.persistence.Embedded
+	@jakarta.persistence.Embedded
 	@AttributeOverride( name = "userId", column = @Column(name = "class_staff_id"))	
 	//@AttributeOverride( name = "userId", column = @Column(name = "classStaffId"))
 	private User staffInClass;
