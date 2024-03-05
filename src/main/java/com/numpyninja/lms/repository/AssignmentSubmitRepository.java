@@ -38,4 +38,6 @@ public interface AssignmentSubmitRepository extends JpaRepository<AssignmentSubm
 
 
     List<AssignmentSubmit> findByAssignment_Aclass_CsId(Long csId);
+
+    List<AssignmentSubmit> findByUser_UserId(String userId);
 }
