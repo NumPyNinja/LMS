@@ -3,7 +3,6 @@ package com.numpyninja.lms.services;
 
 import com.numpyninja.lms.dto.ClassDto;
 import com.numpyninja.lms.dto.ClassRecordingDTO;
-import com.numpyninja.lms.dto.UserSkillDTO;
 import com.numpyninja.lms.entity.Batch;
 import com.numpyninja.lms.entity.Class;
 import com.numpyninja.lms.entity.User;

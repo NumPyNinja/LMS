@@ -1,21 +1,17 @@
 package com.numpyninja.lms.services;
 
-import com.numpyninja.lms.dto.UserRoleProgramBatchDto;
 import com.numpyninja.lms.dto.UserRoleProgramBatchMapDto;
 import com.numpyninja.lms.entity.UserRoleProgramBatchMap;
-import com.numpyninja.lms.exception.InvalidDataException;
 import com.numpyninja.lms.exception.ResourceNotFoundException;
 import com.numpyninja.lms.mappers.UserRoleProgramBatchMapMapper;
-import com.numpyninja.lms.repository.ProgBatchRepository;
-import com.numpyninja.lms.repository.ProgramRepository;
-import com.numpyninja.lms.repository.UserRepository;
+
 import com.numpyninja.lms.repository.UserRoleProgramBatchMapRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class UserRoleProgramBatchMapService {

@@ -1,23 +1,14 @@
 package com.numpyninja.lms.security.jwt;
 
-
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.security.core.GrantedAuthority;
-import static com.numpyninja.lms.util.LMSConstants.*;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 
 @Component
 public class JwtUtils {

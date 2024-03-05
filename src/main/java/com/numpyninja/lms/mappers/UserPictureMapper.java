@@ -5,7 +5,6 @@ import com.numpyninja.lms.dto.UserPictureSlimDto;
 import com.numpyninja.lms.entity.UserPictureEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 

@@ -2,9 +2,6 @@ package com.numpyninja.lms.repository;
 
 import java.util.List;
 
-//import javax.persistence.EntityManager;
-
-import com.numpyninja.lms.entity.UserLogin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

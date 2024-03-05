@@ -1,11 +1,9 @@
 package com.numpyninja.lms.controller;
 
 import com.numpyninja.lms.config.ApiResponse;
-import com.numpyninja.lms.dto.UserRoleProgramBatchDto;
 import com.numpyninja.lms.dto.UserRoleProgramBatchMapDto;
 import com.numpyninja.lms.exception.InvalidDataException;
 import com.numpyninja.lms.exception.ResourceNotFoundException;
-import com.numpyninja.lms.services.ProgramServices;
 import com.numpyninja.lms.services.UserRoleProgramBatchMapService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

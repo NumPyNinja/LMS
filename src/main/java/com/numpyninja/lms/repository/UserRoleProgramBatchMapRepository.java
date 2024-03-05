@@ -1,6 +1,5 @@
 package com.numpyninja.lms.repository;
 
-import com.numpyninja.lms.entity.Batch;
 import com.numpyninja.lms.entity.UserRoleProgramBatchMap;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -1,8 +1,6 @@
 package com.numpyninja.lms.mappers;
 
-import com.numpyninja.lms.dto.UserRoleProgramBatchDto;
 import com.numpyninja.lms.dto.UserRoleProgramBatchMapDto;
-import com.numpyninja.lms.dto.UserRoleProgramBatchSlimDto;
 import com.numpyninja.lms.entity.UserRoleProgramBatchMap;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;

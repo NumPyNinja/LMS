@@ -3,32 +3,15 @@ package com.numpyninja.lms.dto;
 import java.sql.Timestamp;
 
 import javax.validation.constraints.Pattern;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.numpyninja.lms.config.ValidateStatus;
-import com.numpyninja.lms.util.Constants;
-
 import com.numpyninja.lms.util.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
-import javax.validation.constraints.Pattern;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-//@Getter
-//@Setter
-
 public class ProgramDTO {
 
 	    private Long programId;

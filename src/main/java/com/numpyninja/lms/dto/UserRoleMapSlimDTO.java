@@ -4,9 +4,6 @@ import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.numpyninja.lms.config.ValidateStatus;
-import com.numpyninja.lms.entity.Role;
-import com.numpyninja.lms.entity.User;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

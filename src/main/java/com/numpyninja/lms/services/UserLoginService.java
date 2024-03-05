@@ -7,7 +7,6 @@ import com.numpyninja.lms.entity.EmailDetails;
 import com.numpyninja.lms.entity.User;
 import com.numpyninja.lms.entity.UserLogin;
 import com.numpyninja.lms.entity.UserRoleMap;
-import com.numpyninja.lms.exception.ResourceNotFoundException;
 import com.numpyninja.lms.repository.UserLoginRepository;
 import com.numpyninja.lms.repository.UserRepository;
 import com.numpyninja.lms.repository.UserRoleMapRepository;
@@ -15,7 +14,6 @@ import com.numpyninja.lms.security.UserDetailsImpl;
 import com.numpyninja.lms.security.jwt.JwtUtils;
 import com.numpyninja.lms.util.EmailSender;
 
-import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContext;

@@ -3,7 +3,6 @@ package com.numpyninja.lms.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import org.hibernate.annotations.Type;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -5,7 +5,6 @@ import com.numpyninja.lms.dto.ProgramDTO;
 import com.numpyninja.lms.dto.ProgramWithUsersDTO;
 import com.numpyninja.lms.entity.Batch;
 import com.numpyninja.lms.entity.Program;
-import com.numpyninja.lms.entity.User;
 import com.numpyninja.lms.entity.UserRoleProgramBatchMap;
 import com.numpyninja.lms.exception.DuplicateResourceFoundException;
 import com.numpyninja.lms.exception.InvalidDataException;
@@ -18,9 +17,6 @@ import com.numpyninja.lms.repository.UserRoleProgramBatchMapRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
-import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
