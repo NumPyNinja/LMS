@@ -22,5 +22,9 @@ public final class Constants {
 	//Can be used for matching string values for Description  
 	public static final String REGEX_DESC_ALPHA_NUMERIC_SPCL ="^[a-zA-Z0-9]+([a-zA-Z0-9 ]*[,_ .><?;:!#_\\-'\"%]?)+$";
 	public static final String MSG_DESC_ALPHA_NUMERIC_SPCL = "must begin with alphabet and cannot contain characters like (,),@,&,$,* etc.";
+
+	//Used to check if user email is in valid format
+	public static final String REGEX_EMAIL_ID  = "^[a-zA-Z0-9][a-zA-Z0-9.]+@gmail\\.com$";
+	public static final String MSG_INVALID_EMAIL_ID = "must contain only alphanumeric characters and period(.) followed by @gmail.com";
 }
 

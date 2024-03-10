@@ -421,6 +421,10 @@ public class UserServices implements UserDetailsService {
             if (userById.isEmpty()) {
                 throw new ResourceNotFoundException("UserID: " + userId + " Not Found");
             } else {
+                String allCountryRegex = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$";
+                if (!Pattern.compile(allCountryRegex).matcher(updateuserDto.getUserPhoneNumber().toString()).matches()) {
+                    throw new InvalidDataException("Enter phone no in this format (CountryCode)(PhoneNo) +91 1234567890");
+                }
                 if (!isTimeZoneValid(updateuserDto.getUserTimeZone())) {
                     throw new InvalidDataException("Failed to update user, as 'TimeZone' is invalid !! ");
                 }
