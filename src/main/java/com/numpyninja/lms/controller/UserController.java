@@ -1,9 +1,7 @@
 package com.numpyninja.lms.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.security.RolesAllowed;
 import javax.validation.Valid;
 
 import com.numpyninja.lms.config.ApiResponse;
@@ -12,7 +10,6 @@ import com.numpyninja.lms.dto.*;
 import com.numpyninja.lms.entity.Role;
 import com.numpyninja.lms.entity.User;
 import com.numpyninja.lms.entity.UserRoleMap;
-import com.numpyninja.lms.entity.UserRoleProgramBatchMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -171,7 +168,11 @@ public class UserController {
 		}
 
 	}
-
+	@GetMapping("/users/user/{userId}")
+	@ApiOperation("Get User BatchId by User Id")
+	public ResponseEntity<Integer> getBatchIdByUserId(@PathVariable String userId) throws ResourceNotFoundException {
+		return ResponseEntity.ok(this.userServices.getBatchIdByUserId(userId));
+	}
 	@PutMapping("/users/userLogin/{userId}")
 	@ApiOperation("Update User Login Status")
 	public ResponseEntity<String> updateUserLoginStatus(@Valid @PathVariable(value = "userId") String userId, @Valid @RequestBody UserLoginDto updateUserLogin) throws InvalidDataException {
