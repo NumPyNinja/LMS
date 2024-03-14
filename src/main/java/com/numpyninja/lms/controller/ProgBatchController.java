@@ -4,6 +4,8 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,19 +21,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.numpyninja.lms.dto.BatchDTO;
 import com.numpyninja.lms.services.ProgBatchServices;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
-
 @RestController
-@Api(tags="Program Batch Controller", description="All Program Batch CRUD Operations")
+@Tag(name = "Program Batch Controller", description="All Program Batch CRUD Operations")
+//@Api(tags="Program Batch Controller", description="All Program Batch CRUD Operations")
 public class ProgBatchController  {
 
     @Autowired
     private ProgBatchServices batchService;
     
     @GetMapping("/batches")
-    @ApiOperation("Get All Batches")
+    @Operation(summary = "Get All Batches")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_STAFF')")
     public List<BatchDTO> getAll(String searchString) {
         if (StringUtils.isNotBlank(searchString)) {
@@ -42,7 +41,7 @@ public class ProgBatchController  {
     }
     
 	@GetMapping ( path = "/batches/batchId/{batchId}", produces = "application/json")
-	@ApiOperation("Get Batch details by Batch Id")
+	@Operation(summary = "Get Batch details by Batch Id")
 	public ResponseEntity<BatchDTO> getBatchById(@PathVariable(value="batchId") @Positive Integer batchId) {
 		return ResponseEntity.ok(  batchService.findBatchById(batchId) );
 	}
@@ -50,7 +49,7 @@ public class ProgBatchController  {
 	
 	//Get Batch by Name
 	@GetMapping ( path = "/batches/batchName/{batchName}", produces = "application/json")
-	@ApiOperation("Get Batch details by Batch Name")
+	@Operation(summary = "Get Batch details by Batch Name")
 	public ResponseEntity<List<BatchDTO>> getBatchByName(@PathVariable(value="batchName") String batchName) {
 		return ResponseEntity.ok(  batchService.findByProgramBatchName(batchName) );
 	}
@@ -58,7 +57,7 @@ public class ProgBatchController  {
 	
 	//Get Batch List by Program
 	@GetMapping ( path = "/batches/program/{programId}", produces = "application/json")   
-	@ApiOperation("Get Batch details by Program Id")
+	@Operation(summary = "Get Batch details by Program Id")
 	public ResponseEntity<List<BatchDTO>> getBatchByProgram( @PathVariable(value="programId") @Positive Long programId) {
 		return ResponseEntity.ok(  batchService.findBatchByProgramId(programId) );
 	}
@@ -66,7 +65,7 @@ public class ProgBatchController  {
 	
     @PostMapping(path = "/batches", consumes = "application/json", produces = "application/json")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @ApiOperation("Create New Batch")
+    @Operation(summary = "Create New Batch")
     public ResponseEntity<BatchDTO> createBatch( @Valid @RequestBody BatchDTO batchDTO ) {
         BatchDTO batchDTOCreatd = batchService.createBatch(batchDTO );
         return ResponseEntity.status(HttpStatus.CREATED).body(batchDTOCreatd);
@@ -76,7 +75,7 @@ public class ProgBatchController  {
     //Update program Information
     @PutMapping(path = "/batches/{batchId}", consumes = "application/json", produces = "application/json")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @ApiOperation("Update Batch details")
+    @Operation(summary = "Update Batch details")
     public ResponseEntity<BatchDTO> updateBatch( @Valid @RequestBody BatchDTO batchDTO,  @PathVariable Integer batchId ) {
     	BatchDTO batchDTOUpd = batchService.updateBatch( batchDTO, batchId);
     	return ResponseEntity.ok( batchDTOUpd );
@@ -85,7 +84,7 @@ public class ProgBatchController  {
     
     @DeleteMapping(path = "/batches/{id}" , produces = "application/json" )
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @ApiOperation("Delete existing Batch")
+    @Operation(summary = "Delete existing Batch")
     public String deleteBatch( @PathVariable Integer id) {
         batchService.deleteProgramBatch(id);
         String message = "Message:" + " Batch with Id-" + id + " deleted Successfully!";

@@ -3,6 +3,8 @@ package com.numpyninja.lms.controller;
 import java.util.List;
 import javax.validation.Valid;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,18 +27,16 @@ import com.numpyninja.lms.exception.GCalendarIOException;
 import com.numpyninja.lms.exception.GCalendarSecurityException;
 import com.numpyninja.lms.services.GoogleCalendarService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
 @RestController
-@Api(tags = "Google Calendar Integration Controller")
+@Tag(name = "Google Calendar Integration Controller", description = "Endpoints for interacting with Google Calendar")
+//@Api(tags = "Google Calendar Integration Controller")
 public class GoogleCalendarController {
 
 	@Autowired
 	private GoogleCalendarService gCalendarService;
 	
 	@GetMapping(path = "/gcalendar/events", produces = "application/json")
-	@ApiOperation("Gat all the events from the calendar")
+	@Operation(summary = "Gat all the events from the calendar")
 	public ResponseEntity<List<GCalendarEventResponseDTO>> getCalendarEvents() throws CalendarAccessDeniedException, GCalendarIOException, GCalendarSecurityException 
 	{
 		List<GCalendarEventResponseDTO> caleResponse = gCalendarService.getEventsUsingServiceAcc();
@@ -44,7 +44,7 @@ public class GoogleCalendarController {
 	}
 
 	@PostMapping(path = "/gcalendar/event", produces = "application/json")
-	@ApiOperation("Gat all the calendars from given startDate to endDate")
+	@Operation(summary = "Get all the calendars from given startDate to endDate")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<GCalendarEventResponseDTO> createCalendarEvent(@Valid @RequestBody GCalendarEventRequestDTO eventRequest) 
 			throws GCalendarIOException, CalendarAccessDeniedException,  GCalendarCreateEventException, GCalendarSecurityException
@@ -54,7 +54,7 @@ public class GoogleCalendarController {
 	}
 	
 	@PutMapping(path = "/gcalendar/event/{id}", produces = "application/json")
-	@ApiOperation("Gat all the calendars from given startDate to endDate")
+	@Operation(summary = "Gat all the calendars from given startDate to endDate")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<GCalendarEventResponseDTO> updateCalendarEvent(@PathVariable("id")String eventId, @Valid @RequestBody GCalendarEventRequestDTO eventRequest) 
 			throws GCalendarIOException, CalendarAccessDeniedException,  GCalendarCreateEventException, GCalendarSecurityException, GCalendarEventNotFoundException
@@ -64,7 +64,7 @@ public class GoogleCalendarController {
 	}
 	
 	@DeleteMapping(path = "/gcalendar/event/{id}")
-	@ApiOperation("Deletes the event with the given event ID")
+	@Operation(summary = "Deletes the event with the given event ID")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<String> deleteCalendarEvent(@PathVariable ("id") String eventId) 
 			throws GCalendarIOException, CalendarAccessDeniedException,  GCalendarDeleteEventException, GCalendarSecurityException

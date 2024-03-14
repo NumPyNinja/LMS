@@ -4,8 +4,8 @@ import com.numpyninja.lms.config.ApiResponse;
 import com.numpyninja.lms.dto.AssignmentSubmitDTO;
 import com.numpyninja.lms.services.AssignmentSubmitService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,8 +14,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/assignmentsubmission")
-//@Tag(name = "Assignment Submission Controller", description = "Assignment Submission CRUD Operations")
-@Api(tags="Assignment Submission Controller", description="Assignment Submission CRUD Operations")
+@Tag(name = "Assignment Submission Controller", description = "Assignment Submission CRUD Operations")
+//@Api(tags="Assignment Submission Controller", description="Assignment Submission CRUD Operations")
 public class AssignmentSubmitController {
 
     private AssignmentSubmitService assignmentSubmitService;
@@ -25,7 +25,8 @@ public class AssignmentSubmitController {
     }
 
     @GetMapping("/student/{userID}")
-    @ApiOperation("Get Submissions by User ID")
+    @Operation(summary = "Get Submissions by User ID")
+    //@ApiOperation("Get Submissions by User ID")
     public ResponseEntity<List<AssignmentSubmitDTO>> getSubmissionsByUserID(@PathVariable String userID) {
         System.out.println(userID);
         List<AssignmentSubmitDTO> submissionsListDTO = assignmentSubmitService.getSubmissionsByUserID(userID);
@@ -33,7 +34,8 @@ public class AssignmentSubmitController {
     }
 
     @PostMapping(path="", consumes="application/json", produces="application/json")
-    @ApiOperation("Create New Submission")
+    @Operation(summary = "Create New Submission")
+    //@ApiOperation("Create New Submission")
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<AssignmentSubmitDTO> submitAssignment( @RequestBody AssignmentSubmitDTO assignmentSubmitDTO)
     {
@@ -42,7 +44,8 @@ public class AssignmentSubmitController {
     }
     
    @GetMapping("/studentbatch/{batchid}")
-   @ApiOperation("Get Submissions By Batch")
+   @Operation(summary = "Get Submissions By Batch")
+   //@ApiOperation("Get Submissions By Batch")
    public ResponseEntity<List<AssignmentSubmitDTO>> getSubmissionsByBatch(@PathVariable Integer batchid) {
       
    	List<AssignmentSubmitDTO> submissionsListDTO = assignmentSubmitService.getSubmissionsByBatch(batchid);
@@ -50,7 +53,7 @@ public class AssignmentSubmitController {
    }
    
     @GetMapping("")
-    @ApiOperation("Get All Submissions")
+    @Operation(summary = "Get All Submissions")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_STAFF')")
     public ResponseEntity<List<AssignmentSubmitDTO>> getAllSubmissions() {
        
@@ -60,7 +63,7 @@ public class AssignmentSubmitController {
 
 
     @PutMapping(path="/{id}", consumes="application/json", produces="application/json")
-    @ApiOperation("Update details of Submission")
+    @Operation(summary = "Update details of Submission")
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<AssignmentSubmitDTO> resubmitAssignment( @RequestBody AssignmentSubmitDTO assignmentSubmitDTO,
                                                                   @PathVariable Long id)
@@ -70,7 +73,7 @@ public class AssignmentSubmitController {
     }
 
     @DeleteMapping(path="/{id}")
-    @ApiOperation("Delete Submission")
+    @Operation(summary = "Delete Submission")
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<ApiResponse> deleteSubmission(@PathVariable Long id)
     {
@@ -79,7 +82,7 @@ public class AssignmentSubmitController {
     }
     
     @GetMapping("/getGrades/{assignmentId}")
-    @ApiOperation("Get Grades by Assignment Id")
+    @Operation(summary = "Get Grades by Assignment Id")
     public ResponseEntity<List<AssignmentSubmitDTO>> getGradesByAssignmentId(@PathVariable Long assignmentId)
     {
         List<AssignmentSubmitDTO> getListGradesAssignmentDTO = assignmentSubmitService.getGradesByAssinmentId((assignmentId));
@@ -87,14 +90,14 @@ public class AssignmentSubmitController {
     }
     
     @GetMapping("/grades/student/{studentId}")
-    @ApiOperation("Get Grades by Student Id")
+    @Operation(summary = "Get Grades by Student Id")
     public ResponseEntity<List<AssignmentSubmitDTO>> getGradesByStudentId(@PathVariable String studentId){
     	 List<AssignmentSubmitDTO> getListGradesAssignmentByStudentIdDTO = assignmentSubmitService.getGradesByStudentId(studentId);
          return ResponseEntity.ok(getListGradesAssignmentByStudentIdDTO);
     }
 
     @PutMapping(path="/gradesubmission/{submissionId}",consumes="application/json", produces="application/json" )
-    @ApiOperation("Grade Assignment Submission")
+    @Operation(summary = "Grade Assignment Submission")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_STAFF')")
     public ResponseEntity<AssignmentSubmitDTO> gradeAssignmentSubmission(@RequestBody AssignmentSubmitDTO assignmentSubmitDTO,
                                                                      @PathVariable Long submissionId){
@@ -103,21 +106,21 @@ public class AssignmentSubmitController {
     }
     
     @GetMapping("/grades/{batchId}")
-    @ApiOperation("Get Grades by Batch Id")
+    @Operation(summary = "Get Grades by Batch Id")
     public ResponseEntity<List<AssignmentSubmitDTO>> getGradesByBatchId(@PathVariable Integer batchId) {
         List<AssignmentSubmitDTO> assignmentSubmitDTOs = assignmentSubmitService.getGradesByBatchId(batchId);
         return ResponseEntity.ok(assignmentSubmitDTOs);
     }
     
     @GetMapping("/{assignmentId}")
-    @ApiOperation("Get Submission by Assignment Id")
+    @Operation(summary = "Get Submission by Assignment Id")
     public ResponseEntity<List<AssignmentSubmitDTO>> getSubmissionsByAssignmentId(@PathVariable Long assignmentId){
     	 List<AssignmentSubmitDTO> AssignmentsubmissionDTO = assignmentSubmitService.getSubmissionsByAssignment(assignmentId);
          return ResponseEntity.ok(AssignmentsubmissionDTO);
     }
     
     @GetMapping("/program/{programid}")
-    @ApiOperation("Get Gades by Program Id")
+    @Operation(summary = "Get Gades by Program Id")
     public ResponseEntity<List<AssignmentSubmitDTO>> getGradesByProgramId(@PathVariable Long programid) {
        
     	List<AssignmentSubmitDTO> gradesListByProgram = assignmentSubmitService.getGradesByProgramId(programid);
@@ -125,7 +128,7 @@ public class AssignmentSubmitController {
     }
     
     @GetMapping("/mean/{batchId}")
-    @ApiOperation("Get mean by batch Id")
+    @Operation(summary = "Get mean by batch Id")
     public ResponseEntity<String> getGradesMeanByBatchId(@PathVariable Integer batchId) {
        
     	double gradesMeanByBatch = assignmentSubmitService.getGradesMeanByBatchId(batchId);
@@ -133,7 +136,7 @@ public class AssignmentSubmitController {
     }
   
 	@GetMapping("/median/{batchId}")
-	@ApiOperation("Get median by batch Id")
+	@Operation(summary = "Get median by batch Id")
 	public ResponseEntity<String> getGradeMeanByBatchId(@PathVariable Integer batchId) {
 	     
 		Double gradesMedianByBatch = assignmentSubmitService.getGradesMedianByBatchId(batchId);
@@ -141,14 +144,14 @@ public class AssignmentSubmitController {
 	}
 
     @GetMapping("/class/mean/{csId}")
-    @ApiOperation("Get class mean by class Id")
+    @Operation(summary = "Get class mean by class Id")
     public  ResponseEntity<String> getGradeMeanByClassId(@PathVariable Long csId){
      double classGradesMean =  assignmentSubmitService.getGradeMeanByClassId(csId);
         return ResponseEntity.ok("Mean of the class "+ csId +" : " + classGradesMean);
     }
 
     @GetMapping("/class/median/{csId}")
-    @ApiOperation("Get class mean by class Id")
+    @Operation(summary = "Get class mean by class Id")
     public ResponseEntity<String> getGradeMedianByClassId(@PathVariable Long csId){
         double classGradesMedian = assignmentSubmitService.getGradesMedianByClassId(csId);
         return ResponseEntity.ok("Median of the class "+ csId +" : " + classGradesMedian);

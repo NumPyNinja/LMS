@@ -2,6 +2,8 @@ package com.numpyninja.lms.controller;
 
 import java.io.IOException;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
@@ -20,13 +22,10 @@ import com.numpyninja.lms.config.MessageResponse;
 import com.numpyninja.lms.dto.UserPictureEntityDTO;
 import com.numpyninja.lms.services.UserPictureService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
 @RestController
 @RequestMapping("/file")
-
-@Api(tags="User Picture Controller", description="User Picture CRUD Operations")
+@Tag(name = "User Picture Controller", description="User Picture CRUD Operations")
+//@Api(tags="User Picture Controller", description="User Picture CRUD Operations")
 public class UserPictureController {
 
 
@@ -34,7 +33,7 @@ public class UserPictureController {
 	private UserPictureService userpictureservice;
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_STAFF')")
 	@PostMapping(path = "/userpicture", consumes = "application/json", produces = "application/json")
-	@ApiOperation("Create New User Picture")
+	@Operation(summary = "Create New User Picture")
 	public ResponseEntity<UserPictureEntityDTO> Save(@RequestBody UserPictureEntityDTO userpicturedto) throws IOException{
 
 
@@ -44,7 +43,7 @@ public class UserPictureController {
 
 
 	@GetMapping(path="/userpicture/{userid}", produces = "application/json")
-	@ApiOperation("Get User Picture by User ID")
+	@Operation(summary = "Get User Picture by User ID")
 	public ResponseEntity<UserPictureEntityDTO> download(@PathVariable (value="userid")String  userid,  @RequestParam (value="userfiletype") String userfiletype) throws IOException{
 		UserPictureEntityDTO downloadpicture=	userpictureservice.download(userid, userfiletype);
 		return ResponseEntity.ok(downloadpicture);
@@ -54,7 +53,7 @@ public class UserPictureController {
 
 
 	@DeleteMapping("/userpicture/{userid}")
-	@ApiOperation("Delete User Picture")
+	@Operation(summary = "Delete User Picture")
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_STAFF')")
 	public ResponseEntity<MessageResponse> Delete(@PathVariable String userid,@RequestParam String userfiletype ) throws IOException
 	{
@@ -64,7 +63,7 @@ public class UserPictureController {
 	}
 
 	@PutMapping("/userpicture/{userid}")
-	@ApiOperation("Update User Picture")
+	@Operation(summary = "Update User Picture")
 	@PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_STAFF')")
 	public ResponseEntity<UserPictureEntityDTO> update(@RequestBody  UserPictureEntityDTO userpicturedto ,@PathVariable String userid) throws IOException
 	{

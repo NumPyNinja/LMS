@@ -5,9 +5,8 @@ import com.numpyninja.lms.dto.UserRoleProgramBatchMapDto;
 import com.numpyninja.lms.exception.InvalidDataException;
 import com.numpyninja.lms.exception.ResourceNotFoundException;
 import com.numpyninja.lms.services.UserRoleProgramBatchMapService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/userRoleProgramBatchMap")
-@Api(tags="User Role Program Batch Map Controller")
+@Tag(name = "User Role Program Batch Map Controller")
+//@Api(tags="User Role Program Batch Map Controller")
 public class UserRoleProgramBatchMapController {
 
     @Autowired
@@ -26,7 +26,7 @@ public class UserRoleProgramBatchMapController {
 
 
     @GetMapping("")
-    @ApiOperation("Get Assigned Program/Batch(es) of All Users")
+    @Operation(summary = "Get Assigned Program/Batch(es) of All Users")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<UserRoleProgramBatchMapDto>> getAll() {
         return ResponseEntity.ok(userRoleProgramBatchMapService.getAllUserRoleProgramBatchMaps());
@@ -34,7 +34,7 @@ public class UserRoleProgramBatchMapController {
 
 
     @GetMapping("/{userId}")
-    @ApiOperation("Get Assigned Program/Batch of a User By User Id")
+    @Operation(summary = "Get Assigned Program/Batch of a User By User Id")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<UserRoleProgramBatchMapDto>> getById(@PathVariable(value="userId") String userId) throws InvalidDataException
     {
@@ -44,7 +44,7 @@ public class UserRoleProgramBatchMapController {
 
 
     @DeleteMapping("/deleteAll/{userId}")
-    @ApiOperation("Delete All Programs/Batches assigned to the User By UserId")
+    @Operation(summary = "Delete All Programs/Batches assigned to the User By UserId")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ApiResponse> deleteAllProgramBatchesAssignedToAUser(@PathVariable(value = "userId") String userId) throws ResourceNotFoundException
     {
