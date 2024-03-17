@@ -25,6 +25,7 @@ public class LmsServicesApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(LmsServicesApplication.class, args);
+        System.out.println("**************");
     }
 
     
