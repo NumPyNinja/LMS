@@ -632,12 +632,15 @@ public class UserServices implements UserDetailsService {
         } else if(!noBatchProgramForUser) {
 //            throw new ResourceNotFoundException("UserID: " + userId + " Cannot be deleted as the User is assigned to a Batch/Program ");
            List<UserRoleProgramBatchMap> userRoleProgramBatchMapList= userRoleProgramBatchMapRepository.findByUser_UserId(userId);
-            if(Objects.equals(userRoleProgramBatchMapList.get(0).getRole().getRoleId(), "R03")){
-                userRoleProgramBatchMapRepository.deleteById(userRoleProgramBatchMapRepository.findByUser_UserId(userId).get(0).getUserRoleProgramBatchId());
+           // if(Objects.equals(userRoleProgramBatchMapList.get(0).getRole().getRoleId(), "R03")){
+              //  userRoleProgramBatchMapRepository.deleteById(userRoleProgramBatchMapRepository.findByUser_UserId(userId).get(0).getUserRoleProgramBatchId());
+                for(int i=0;i<userRoleProgramBatchMapList.size();i++){
+                    userRoleProgramBatchMapList.get(i).setUserRoleProgramBatchStatus("Inactive");
+                }
                 UserLogin userLogin1=userLoginRepository.findById(userId).get();
                 userLogin1.setLoginStatus("Inactive");
                 userLoginRepository.save(userLogin1);
-            }
+           // }
         } else {
 
             UserLogin userLogin1=userLoginRepository.findById(userId).get();
