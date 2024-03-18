@@ -968,7 +968,12 @@ public class UserServices implements UserDetailsService {
         if (userRoleProgramBatchMapList.isEmpty()) {
             throw new ResourceNotFoundException("No Users found for the given User ID: " + userId);
         }
-        return userRoleProgramBatchMapList.get(0).getBatch().getBatchId();
+
+          if(userRoleProgramBatchMapList.get(0).getUserRoleProgramBatchStatus().toLowerCase().equals("inactive")){
+              return  userRoleProgramBatchMapList.get(1).getBatch().getBatchId();
+          }else
+              return  userRoleProgramBatchMapList.get(0).getBatch().getBatchId();
+
     }
 
 	/*
