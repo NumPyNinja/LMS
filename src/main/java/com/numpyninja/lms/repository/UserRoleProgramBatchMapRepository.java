@@ -30,4 +30,6 @@ public interface UserRoleProgramBatchMapRepository extends JpaRepository<UserRol
 
 
     List<UserRoleProgramBatchMap> findByRole_RoleId(String roleId);
+
+    List<UserRoleProgramBatchMap> findBatch_BatchIdByUser_UserId(String userId);
 }

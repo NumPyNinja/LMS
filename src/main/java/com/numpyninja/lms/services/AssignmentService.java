@@ -2,8 +2,11 @@ package com.numpyninja.lms.services;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.numpyninja.lms.entity.*;
 import com.numpyninja.lms.entity.Class;
@@ -38,7 +41,13 @@ public class AssignmentService {
 	private UserRoleMapRepository userRoleMapRepository;
 
 	@Autowired
+	private UserRoleProgramBatchMapRepository userRoleProgramBatchMapRepository;
+
+	@Autowired
 	private ClassRepository classRepository;
+
+	@Autowired
+	private AssignmentSubmitRepository submissionRepository;
 
 	@Autowired
 	private AssignmentMapper assignmentMapper;
@@ -181,4 +190,26 @@ public class AssignmentService {
 			throw new ResourceNotFoundException("Assignments", "BatchId", batchId);
 		return assignmentMapper.toAssignmentDtoList(assignments);
 	}
+
+    public List<AssignmentDto> findMissingAssignments(String userId) {
+		List<Assignment> allAssignments = assignmentRepository.findAll();
+		List<AssignmentSubmit> allSubmittedAssignments = submissionRepository.findByUser_UserId(userId);
+		List<UserRoleProgramBatchMap> userRoleMap1 = userRoleProgramBatchMapRepository.findBatch_BatchIdByUser_UserId(userId);
+		int assignmentBatchId = userRoleMap1.get(0).getBatch().getBatchId();
+		System.out.println("Batch Id"+assignmentBatchId);
+		if(allSubmittedAssignments==null || allSubmittedAssignments.isEmpty()){
+			return assignmentMapper.toAssignmentDtoList(allAssignments);
+		}
+		List<Long> submittedAssignmentIds = new ArrayList<>();
+		for (AssignmentSubmit submission : allSubmittedAssignments) {
+			submittedAssignmentIds.add(submission.getAssignmentId());
+		}
+		List<Assignment> missingAssignments = allAssignments.stream()
+				.filter(assignment -> !submittedAssignmentIds.contains(assignment.getAssignmentId()))
+				.filter(assignment-> assignment.getBatch().getBatchId() == assignmentBatchId)
+				.collect(Collectors.toList());
+		return assignmentMapper.toAssignmentDtoList(missingAssignments);
+
+    }
+
 }

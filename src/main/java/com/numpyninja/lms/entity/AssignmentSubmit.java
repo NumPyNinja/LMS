@@ -67,4 +67,8 @@ public class AssignmentSubmit {
     @Column(name="last_mod_time")
     private Timestamp lastModTime;
 
+    public Long getAssignmentId() {
+        return assignment != null ? assignment.getAssignmentId() : null;
+
+    }
 }

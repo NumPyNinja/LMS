@@ -95,5 +95,12 @@ public class AssignmentController {
   	public ResponseEntity<List<AssignmentDto>> getAssignmentsForBatch(@PathVariable(value="batchId") Integer batchId) {
   		return ResponseEntity.ok(this.assignmentService.getAssignmentsForBatch(batchId));
   	}
-	
+
+	  @GetMapping("/studentAssignment/{userId}")
+	@ApiOperation("Get all missing assignment for student")
+	public ResponseEntity<List<AssignmentDto>> getAssignmentsByUserId(@PathVariable(value = "userId") String userId) {
+		  return ResponseEntity.ok(this.assignmentService.findMissingAssignments(userId));
+	  }
+
+
 }
