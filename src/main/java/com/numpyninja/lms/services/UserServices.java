@@ -216,6 +216,10 @@ public class UserServices implements UserDetailsService {
         UserLogin existingLoginUser = userLoginRepository.findByUserUserId(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
 
+        if(existingLoginUser.getLoginStatus().equalsIgnoreCase("Inactive")){
+            throw new ResourceNotFoundException("User with " + userId + " is Inactive");
+        }
+
         List<UserRoleMap> userRoleMaps = userRoleMapRepository.findUserRoleMapsByUserUserId(userId);
 
         UserAllDto userAllDto = UserAllDto.builder()
