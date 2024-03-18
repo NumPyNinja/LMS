@@ -968,11 +968,8 @@ public class UserServices implements UserDetailsService {
         if (userRoleProgramBatchMapList.isEmpty()) {
             throw new ResourceNotFoundException("No Users found for the given User ID: " + userId);
         }
-
-          if(userRoleProgramBatchMapList.get(0).getUserRoleProgramBatchStatus().toLowerCase().equals("inactive")){
-              return  userRoleProgramBatchMapList.get(1).getBatch().getBatchId();
-          }else
-              return  userRoleProgramBatchMapList.get(0).getBatch().getBatchId();
+        List<UserRoleProgramBatchMap> userRoleProgramBatchMapList1= userRoleProgramBatchMapList.stream().filter(x->x.getUserRoleProgramBatchStatus().equals("Active")).collect(Collectors.toList());
+        return userRoleProgramBatchMapList1.get(0).getBatch().getBatchId();
 
     }
 
