@@ -960,7 +960,7 @@ public class UserServices implements UserDetailsService {
     }
 
     public int getBatchIdByUserId(String userId) {
-        //Get All batch by User Id
+
         User user1 = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("userId " + userId + " not found"));
 
