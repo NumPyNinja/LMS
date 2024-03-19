@@ -966,6 +966,21 @@ public class UserServices implements UserDetailsService {
         return userRepository.findByUserId(userId);
     }
 
+    public int getBatchIdByUserId(String userId) {
+        //Get All batch by User Id
+        User user1 = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("userId " + userId + " not found"));
+
+        List<UserRoleProgramBatchMap> userRoleProgramBatchMapList = userRoleProgramBatchMapRepository.findByUser_UserId(userId);
+
+        if (userRoleProgramBatchMapList.isEmpty()) {
+            throw new ResourceNotFoundException("No Users found for the given User ID: " + userId);
+        }
+        List<UserRoleProgramBatchMap> userRoleProgramBatchMapList1= userRoleProgramBatchMapList.stream().filter(x->x.getUserRoleProgramBatchStatus().equals("Active")).collect(Collectors.toList());
+        return userRoleProgramBatchMapList1.get(0).getBatch().getBatchId();
+
+    }
+
 	/*
 	 * public UserDto getAllUsersById(String Id) throws ResourceNotFoundException {
 	 * Optional<User> userById = userRepository.findById(Id); if(userById.isEmpty()
