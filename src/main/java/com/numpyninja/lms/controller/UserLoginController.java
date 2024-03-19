@@ -7,11 +7,9 @@ import com.numpyninja.lms.dto.LoginDto;
 import com.numpyninja.lms.exception.InvalidDataException;
 import com.numpyninja.lms.services.UserLoginService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserCache;
@@ -20,7 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@Api(tags = "User Login Controller", description = "User Login Authentication")
+@Tag(name = "User Login Controller", description = "User Login Authentication")
+//@Api(tags = "User Login Controller", description = "User Login Authentication")
 public class UserLoginController {
     private UserLoginService userLoginService;
     @Autowired
@@ -47,14 +46,14 @@ public class UserLoginController {
     */
 
     @PostMapping("/login")
-    @ApiOperation("User Sign In")
+    @Operation(summary = "User Sign In")
     public ResponseEntity<JwtResponseDto> signin(@Valid @RequestBody LoginDto loginDto) {
         return ResponseEntity.ok(userLoginService.signin(loginDto));
     }
 
 
     @GetMapping("/logoutlms")
-    @ApiOperation("User log out")
+    @Operation(summary = "User log out")
     public ResponseEntity<String> logout() {
         userLoginService.logout();
         return ResponseEntity.ok("Logout successful");
@@ -85,7 +84,7 @@ public class UserLoginController {
     }
     
     @PostMapping("/login/forgotpassword/confirmEmail")
-	@ApiOperation("ForgotPassword Confirm Email")
+	@Operation(summary = "ForgotPassword Confirm Email")
 	public ResponseEntity<JwtResponseDto> forgotPasswordConfirmEmail(@Valid @RequestBody EmailDto userLoginEmail) throws InvalidDataException {
     	JwtResponseDto forgotPassResDto = userLoginService.forgotPasswordConfirmEmail(userLoginEmail);
 		String status=forgotPassResDto.getStatus();

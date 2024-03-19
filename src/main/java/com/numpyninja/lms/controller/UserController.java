@@ -7,6 +7,8 @@ import com.numpyninja.lms.entity.Role;
 import com.numpyninja.lms.entity.User;
 import com.numpyninja.lms.entity.UserRoleMap;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +27,10 @@ import com.numpyninja.lms.exception.InvalidDataException;
 import com.numpyninja.lms.exception.ResourceNotFoundException;
 import com.numpyninja.lms.mappers.UserMapper;
 import com.numpyninja.lms.services.UserServices;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
 @RestController
 //@RequestMapping("/users")
-@Api(tags="User Controller", description="User CRUD Operations")
+@Tag(name = "User Controller", description="User CRUD Operations")
+//@Api(tags="User Controller", description="User CRUD Operations")
 public class UserController {
 
 	private UserMapper userMapper;
@@ -50,7 +49,7 @@ public class UserController {
 
 	//get all users from LMS_Users table
 	@GetMapping("/users")
-	@ApiOperation("Get all Users")
+	@Operation(summary = "Get all Users")
 	public ResponseEntity<List<UserDto>> getAllUsers() {
 		//List<User> userList = userServices.getAllUsers();
 		List<UserDto> userList = userServices.getAllUsers();
@@ -58,14 +57,14 @@ public class UserController {
 	}
 
 	@GetMapping("/v2/users")
-	@ApiOperation("Get all Users with Facets/Filters")
+	@Operation(summary = "Get all Users with Facets/Filters")
 	public ResponseEntity<UserDTOV2> getAllUsersV2() {
 		return ResponseEntity.ok(userServices.getAllUsersV2());
 	}
 
 	//get user by ID - user, role, program, batch, skill and other details
 	@GetMapping("/users/{id}")
-	@ApiOperation("Get User Information by ID")
+	@Operation(summary = "Get User Information by ID")
 	public ResponseEntity getUserInfoById(@PathVariable String id) {
 		UserAllDto userInfo = userServices.getUserInfoById(id);
 		return ResponseEntity.ok(userInfo);
@@ -74,7 +73,7 @@ public class UserController {
 	//create user with Role
 	@PostMapping("/users/roleStatus")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@ApiOperation("Create User Login with Role")
+	@Operation(summary = "Create User Login with Role")
 	public ResponseEntity<UserDto> createUserloginWithRole(@Valid @RequestBody UserLoginRoleDTO newUserRoleDto) throws InvalidDataException, DuplicateResourceFoundException {
 		UserDto responseDto = userServices.createUserLoginWithRole(newUserRoleDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
@@ -83,7 +82,7 @@ public class UserController {
 	//update user info in User Table
 	@PutMapping("/users/{userId}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@ApiOperation("Update User")
+	@Operation(summary = "Update User")
 	public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserDto updateuserDto, @PathVariable(value = "userId") String userId) throws ResourceNotFoundException, InvalidDataException {
 		UserDto responseDto = userServices.updateUser(updateuserDto, userId);
 		return ResponseEntity.status(HttpStatus.OK).body(responseDto);
@@ -93,7 +92,7 @@ public class UserController {
 	//update User role - (Active/inactive) for a given user id and role id
 	@PutMapping("/users/roleStatus/{userId}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@ApiOperation("Update User Role Status")
+	@Operation(summary = "Update User Role Status")
 	public ResponseEntity<String> updateUserRoleStatus(@Valid @PathVariable(value = "userId") String userId, @Valid @RequestBody UserRoleMapSlimDTO updateUserRoleStatus) throws InvalidDataException {
 		//String UserRole, String UserStatus
 		String responseDto = userServices.updateUserRoleStatus(updateUserRoleStatus, userId);
@@ -103,7 +102,7 @@ public class UserController {
 	//update User role Id - (R01/R02/R03) for a given user id 
 	@PutMapping("/users/roleId/{userId}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@ApiOperation("Update User Role Id")
+	@Operation(summary = "Update User Role Id")
 	public ResponseEntity<String> updateRoleId(@Valid @PathVariable(value = "userId") String userId, @Valid @RequestBody UserRoleIdDTO updateRoleId) throws InvalidDataException {
 		String responseDto = userServices.updateRoleId(updateRoleId, userId);
 		return ResponseEntity.status(HttpStatus.OK).body("Role Id Updated for User: " + userId);
@@ -112,7 +111,7 @@ public class UserController {
 	//cascade deletes users and User roles
 	@DeleteMapping("/users/{userId}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@ApiOperation("Delete User")
+	@Operation(summary = "Delete User")
 	public ResponseEntity<String> deleteUser(@PathVariable(value = "userId") String userId) throws ResourceNotFoundException {
 		String deletedUserId = userServices.deleteUser(userId);
 		System.out.println("Hi");
@@ -132,7 +131,7 @@ public class UserController {
 	// Update existing user to assign program and its corresponding batch
 	@PutMapping("/users/roleProgramBatchStatus/{userId}")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@ApiOperation("Update User Role Program Batch status")
+	@Operation(summary = "Update User Role Program Batch status")
 	public ResponseEntity<ApiResponse> assignUpdateUserRoleProgramBatchStatus(@PathVariable String userId,
 																		 @RequestBody UserRoleProgramBatchDto userRoleProgramBatchDto) {
 		String response= userServices.assignUpdateUserRoleProgramBatchStatus(userRoleProgramBatchDto, userId);
@@ -149,14 +148,14 @@ public class UserController {
 
 	//USER - GET USER BY PROGRAM-Batch
 	@GetMapping("/users/programBatch/{batchId}")
-	@ApiOperation("Get User by Program Batches")
+	@Operation(summary = "Get User by Program Batches")
 	public ResponseEntity<List<UserDto>> getUserByProgramBatches(@PathVariable Integer batchId) throws ResourceNotFoundException {
 		return ResponseEntity.ok(this.userServices.getUserByProgramBatch(batchId));
 	}
 
 
 	@GetMapping("/users/programs/{programId}")
-	@ApiOperation("Get User for Program")
+	@Operation(summary = "Get User for Program")
 	public ResponseEntity<List<UserDto>> getUsersForProgram(@PathVariable Long programId) throws ResourceNotFoundException {
 		{
 			List<UserDto> list = userServices.getUsersByProgram(programId);
@@ -166,7 +165,7 @@ public class UserController {
 	}
 
 	@PutMapping("/users/userLogin/{userId}")
-	@ApiOperation("Update User Login Status")
+	@Operation(summary = "Update User Login Status")
 	public ResponseEntity<String> updateUserLoginStatus(@Valid @PathVariable(value = "userId") String userId, @Valid @RequestBody UserLoginDto updateUserLogin) throws InvalidDataException {
 		//String UserRole, String UserStatus
 		String responseDto = userServices.updateUserLogin(updateUserLogin, userId);
@@ -180,13 +179,13 @@ public class UserController {
 
 	//get users by roleid
 	@GetMapping("/users/roles/{roleId}")
-	@ApiOperation("Get User by RoleID")
+	@Operation(summary = "Get User by RoleID")
 	public ResponseEntity<List<UserDto>> getUserByRoleId(@PathVariable String roleId) throws ResourceNotFoundException {
 		return ResponseEntity.ok(this.userServices.getUsersByRoleID(roleId));
 	}
 	
 	@GetMapping("/users/byStatus")
-	@ApiOperation("Gets count of active and inactive users. Unless role id is specified, gets all type of users")
+	@Operation(summary = "Gets count of active and inactive users. Unless role id is specified, gets all type of users")
 	public ResponseEntity<List<UserCountByStatusDTO>> getUsersCountByStatus(@RequestParam(defaultValue = "all", name = "id") String roleId ) throws ResourceNotFoundException{
 		
 		List<UserCountByStatusDTO> usersCountByStatus = userServices.getUsercountByStatus(roleId);
@@ -194,14 +193,14 @@ public class UserController {
 		
 	}
 	@GetMapping("/users/activeUsers")
-	@ApiOperation("Get all Active User ")
+	@Operation(summary = "Get all Active User ")
 	public List<User> getUserWithActiveStatus() throws ResourceNotFoundException {
 		return userServices.getUserWithActiveStatus();
 	}
 
 
 	@GetMapping("/roles")
-	@ApiOperation("Get All roles")
+	@Operation(summary = "Get All roles")
 	public List<Role> getAllRoles(){
 		return userServices.getAllRoles();
 	}
