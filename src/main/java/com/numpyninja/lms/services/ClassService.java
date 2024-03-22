@@ -131,7 +131,13 @@ public class ClassService {
 		if(!roleMapRepository)
 			throw new ResourceNotFoundException("User", "Role(Admin/Staff)", newClassDto.getClassStaffId());
 
-
+		//Bug - Able to create class for past date
+		//BugFix - Able to create class for future dates only
+		Date date = new Date();
+		if(newClassDto.getClassDate().before(date))
+		{
+			throw new InvalidDataException("Please provide a Future Class Date");
+		}
 
 		Class class1 = classMapper.toClassScheduleEntity(newClassDto);
 
