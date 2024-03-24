@@ -37,8 +37,8 @@ public class ProgramDTO {
 			message = "programName " + Constants.MSG_ALPHANUMERIC_ONLY_MIN_2)
 	    private String programName;
 
-		@Pattern(regexp = Constants.REGEX_MIN_2_ALPHA_NUMERIC,
-			message = "programDescription " + Constants.MSG_ALPHANUMERIC_ONLY_MIN_2)
+//		@Pattern(regexp = Constants.REGEX_MIN_2_ALPHA_NUMERIC,
+//			message = "programDescription " + Constants.MSG_ALPHANUMERIC_ONLY_MIN_2)
 	   	private String programDescription;
 
 	    //created custom annotation to validate status(accepts only active and inactive)

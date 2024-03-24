@@ -32,7 +32,7 @@ public class Program {
     @NotNull
     private String programName;
 
-    @NotBlank(message = "Program Description is mandatory")
+//    @NotBlank(message = "Program Description is mandatory")
     @Column(name="program_description")
     private String programDescription;
 
