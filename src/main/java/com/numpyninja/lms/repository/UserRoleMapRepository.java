@@ -57,9 +57,6 @@ public interface UserRoleMapRepository  extends JpaRepository <UserRoleMap, Long
 			+ "GROUP BY u.userRoleStatus")
 	List<UserCountByStatusDTO> getUsersCountByStatusByRole(String roleId);
 
-	@Query("Select u FROM UserRoleMap u WHERE u.userRoleStatus=:userRoleStatus")
-    List<UserRoleMap> findByUserRoleStatus(@Param(value="userRoleStatus") String userRoleStatus);
-
 	 List<UserRoleMap> findByRole_RoleId(String roleId);
 }
 

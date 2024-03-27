@@ -953,9 +953,8 @@ public class UserServices implements UserDetailsService {
     }
 
     public List<User> getUserWithActiveStatus( ) {
-        List<UserRoleMap> userLogin1=userRoleMapRepository.findByUserRoleStatus("Active");
-        List<String> userId = userLogin1.stream().map(UserRoleMap::getUserId).collect(Collectors.toList());
-        System.out.println(userId);
+        List<UserLogin> userLogin1=userLoginRepository.findByLoginStatus("active");
+        List<String> userId = userLogin1.stream().map(UserLogin::getUserId).collect(Collectors.toList());
         return userRepository.findByUserId(userId);
     }
 
